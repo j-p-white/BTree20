@@ -1,15 +1,15 @@
 import java.util.ArrayList;
 // let me add something
 
-public class Node {
+public class Node<T> {
 	final int MAXKEYS = 31; 
 	final int middle = MAXKEYS/2;
 	int leftChildStartNumber; 
 	int rightChildStartNumber; 
 	int myPosition;
 	
-	ArrayList<WordObject> keys = new ArrayList<WordObject>(); 
-	ArrayList<Node> links = new ArrayList<Node>();
+	ArrayList<WordObject<T>> keys = new ArrayList<WordObject<T>>(); 
+	ArrayList<Node<T>> links = new ArrayList<Node<T>>();
 	
 	public Node(){
 		
@@ -34,8 +34,8 @@ public class Node {
 	
 	public void rootSplit(){
 		int mid = middle;
-		Node left = new Node(); 
-		Node right = new Node ();
+		Node<T> left = new Node<T>(); 
+		Node<T> right = new Node<T> ();
 		
 		//get all the left keys
 		for(int i =0; i < mid;i++){
@@ -51,8 +51,8 @@ public class Node {
 	}//end split root
 	
 	//needs to some how put node into parent
-	public WordObject split(){
-		Node right = new Node();
+	public WordObject<T> split(){
+		Node<T> right = new Node<T>();
 		
 		//get right
 		while(keys.size()> middle+1){
@@ -66,7 +66,7 @@ public class Node {
 	}
 	public boolean hasValue(String val)
 	{
-		for(WordObject w: keys){
+		for(WordObject<T> w: keys){
 			if(w.word.equals(val)){
 				return true;
 			}//end if

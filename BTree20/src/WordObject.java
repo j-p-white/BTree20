@@ -1,13 +1,13 @@
 
 
-public class WordObject{
-String word; 
+public class WordObject<T>{
+T word; 
 String url; 
 
 public WordObject(){
 	
 }//end empty constructor
- public WordObject(String letters, String src){
+ public WordObject(T letters, String src){
 	 word = letters; 
 	 url = src;
  }// end constructor
