@@ -1,14 +1,13 @@
 import java.util.ArrayList;
-// let me add something
 
-public class Node<T> {
+public class Node<T extends Comparable<T>> {
 	final int MAXKEYS = 31; 
 	final int middle = MAXKEYS/2;
 	int leftChildStartNumber; 
 	int rightChildStartNumber; 
 	int myPosition;
 	
-	ArrayList<WordObject<T>> keys = new ArrayList<WordObject<T>>(); 
+	ArrayList<T> keys = new ArrayList<T>(); 
 	ArrayList<Node<T>> links = new ArrayList<Node<T>>();
 	
 	public Node(){
@@ -47,31 +46,31 @@ public class Node<T> {
 		}
 		links.add(left);
 		links.add(right);
-		
 	}//end split root
 	
-	//needs to some how put node into parent
-	public WordObject<T> split(){
+	public void split(Node<T> link){
 		Node<T> right = new Node<T>();
-		
+		T middleVal;
+		int count = 0;
 		//get right
-		while(keys.size()> middle+1){
-			right.keys.add(keys.remove(middle+1));	
+		while(link.keys.size()> middle+1){
+			right.keys.add(link.keys.remove(middle+1));	
 		}
-		//hook up the new link
-		links.add(right);
+		//get the middle value
+		middleVal= link.keys.remove(link.keys.size()-1);
 		
-		//send back the middle node object
-		return keys.remove(middle);
+		//compare the keys to the middle guy
+		for(T value: keys){
+			if(compare(middleVal,value)>0){
+				count++;
+			}
+		}
+		//add keys and links in proper spot
+		keys.add(count,middleVal); 
+		links.add(count+1,right);
+	}//end split
+	
+	public int compare(T obj1,T obj2){
+		return obj1.compareTo(obj2);
 	}
-	public boolean hasValue(String val)
-	{
-		for(WordObject<T> w: keys){
-			if(w.word.equals(val)){
-				return true;
-			}//end if
-		}//end for
-		//else
-		return false;
-	}//end hasValue
 }	//end node

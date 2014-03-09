@@ -1,29 +1,42 @@
 
-public class BTree<T> {
-	NaturalComparator comp = new NaturalComparator();
+public class BTree<T extends Comparable<T>> {
 	Node<T> root;
 	
 	public void insert(T value){
 		if(root.isFull()){
 			root.rootSplit();
+			insert(value);
 		}
 		else //call private add 
 			insert(root, value);
 	}//end public add 
 	
 	private void insert(Node<T> node,T val){
-		
-		if(node.isFull()){
-			node.split();
-			insert(val);
+		Node<T> link = new Node<T>();
+		if(node.isLeaf())
+		{
+			if(node.isFull())
+			{
+				 return;
+			}//end if
+			else
+			{
+				//this will end the method
+				node.keys.add(val);
+			}//end else
+		}// end leaf case
+		else
+		{
+				link = findLink(node,val);
+				insert(link,val);
+				node.split(link);
 		}
-		
 	}//end private insert
 	
 	public Node<T> findLink(Node<T> node, T value){
 		int count = 0;
-		for(WordObject<T> w: node.keys){
-			if(comp.compare(w.word, value)>0){
+		for(T w: node.keys){
+			if(compare(w, value)>0){
 				count++;
 			}//end if
 			else{
@@ -32,4 +45,7 @@ public class BTree<T> {
 		}// end for
 			return node.links.get(count);
 	}
-}
+	public int compare(T obj1,T obj2){
+		return obj1.compareTo(obj2);
+	}
+}//end class
