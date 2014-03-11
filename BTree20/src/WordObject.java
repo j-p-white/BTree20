@@ -7,6 +7,7 @@ String url;
 public WordObject(){
 	
 }//end empty constructor
+
  public WordObject(String letters, String src){
 	 word = letters; 
 	 url = src;
