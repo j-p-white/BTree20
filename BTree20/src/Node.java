@@ -1,6 +1,8 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Node<T extends Comparable<T>> {
+public class Node<T extends Comparable<T>> implements Serializable{
+	private static final long serialVersionUID = 1L;
 	final int MAXKEYS = 31; 
 	final int middle = MAXKEYS/2;
 	int leftChildStartNumber; 

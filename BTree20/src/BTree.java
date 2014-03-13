@@ -1,5 +1,8 @@
+import java.io.Serializable;
+
 //and a new change
-public class BTree<T extends Comparable<T>> {
+public class BTree<T extends Comparable<T>> implements Serializable {
+	private static final long serialVersionUID = 1L;
 	Node<T> root;
 	
 	public void insert(T value){

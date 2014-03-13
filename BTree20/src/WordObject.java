@@ -1,6 +1,8 @@
+import java.io.Serializable;
 
+public class WordObject implements Serializable {
 
-public class WordObject{
+private static final long serialVersionUID = 1L;
 String word; 
 String url; 
 
@@ -12,5 +14,4 @@ public WordObject(){
 	 word = letters; 
 	 url = src;
  }// end constructor
- 
 }//end class
