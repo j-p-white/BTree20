@@ -41,9 +41,9 @@ public class JsoupParser {
 							paddedUrl = url+ getPadding(trimmedUrl.length());
 						}//end urlIf
 						myObj = new WordObject(paddedWord,paddedUrl);
-						//if(tree.search(myObj)){
-						// tree.insert(myObj);
-						//}//end if
+						if(tree.search(myObj)){
+						 tree.insert(myObj);
+						}//end if
 					}//end for
 				}//end scanner while
 			scan.close();			
