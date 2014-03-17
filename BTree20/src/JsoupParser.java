@@ -14,36 +14,28 @@ import org.jsoup.nodes.Document;
  * Copyright notice: none
  */
 public class JsoupParser {
-	
+	BTree<String> tree = new BTree<String>();
 	//need to make all word and url lengths the same
 	public void readInFile(){ //make this line main to test again
 		
 		Scanner scan;
-		WordObject myObj;
 		String url;
 		String paddedWord = null;
-		String paddedUrl = null;
 		File BTreeFile = new File("BTreeURL.txt");
 		String[] fileWords;
-		BTree tree;
+		
 		try{ 
 			scan = new Scanner(BTreeFile);
 				while(scan.hasNextLine()){
 					url = scan.nextLine();
 						//parse the url
 					fileWords = JsoupParsing(url);
+					String trimmedUrl = urlTrimming(url)[1];
 					for(String words:fileWords){
 						if(words.length() < 33){
-							paddedWord = words+getPadding(words.length());
-						}// end wordsIf
-						String trimmedUrl = urlTrimming(url)[1];
-						if(trimmedUrl.length() < 33 ){
-							paddedUrl = url+ getPadding(trimmedUrl.length());
-						}//end urlIf
-						myObj = new WordObject(paddedWord,paddedUrl);
-						if(tree.search(myObj)){
-						 tree.insert(myObj);
-						}//end if
+							paddedWord = hookStrings(words,trimmedUrl) + getPadding(hookStrings(words,trimmedUrl).length());
+						}// end wordsIf	
+						tree.insert(paddedWord);
 					}//end for
 				}//end scanner while
 			scan.close();			
@@ -52,6 +44,11 @@ public class JsoupParser {
 			e.printStackTrace();
 		}
 	}//end readInFile
+	
+	public String hookStrings(String withSpace, String toConnect){
+		String pad = " ";
+		return withSpace = withSpace+pad+ toConnect;
+	}
 	
 	public String getPadding(int wordLength){
 		int diffrence;

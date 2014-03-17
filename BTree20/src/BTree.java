@@ -5,6 +5,10 @@ public class BTree<T extends Comparable<T>> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	Node<T> root;
 	
+	public BTree(){
+		
+	}// end BTree
+	
 	public void insert(T value){
 		if(root.isFull()){
 			root.rootSplit();
@@ -64,8 +68,6 @@ public class BTree<T extends Comparable<T>> implements Serializable {
 		}//end link else 
 		return found;
 	}
-	
-	
 	public Node<T> findLink(Node<T> node, T value){
 		int count = 0;
 		for(T w: node.keys){
