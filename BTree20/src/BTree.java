@@ -83,4 +83,12 @@ public class BTree<T extends Comparable<T>> implements Serializable {
 	public int compare(T obj1,T obj2){
 		return obj1.compareTo(obj2);
 	}
+	
+	public Node<T> getRoot(){
+		return root;
+	}
+	
+	public void setRoot(Node<T> node){
+		root = node;
+	}
 }//end class

@@ -15,15 +15,12 @@ import org.jsoup.nodes.Document;
  */
 public class JsoupParser {
 	BTree<String> tree = new BTree<String>();
-	//need to make all word and url lengths the same
-	public void readInFile(){ //make this line main to test again
-		
+	public void readInFile(){ 
 		Scanner scan;
 		String url;
 		String paddedWord = null;
 		File BTreeFile = new File("BTreeURL.txt");
 		String[] fileWords;
-		
 		try{ 
 			scan = new Scanner(BTreeFile);
 				while(scan.hasNextLine()){

@@ -1,9 +1,9 @@
 import java.io.Serializable;
 import java.util.ArrayList;
-
+//this class needs to the same type as the BTree some how
 public class Node<T extends Comparable<T>> implements Serializable{
 	private static final long serialVersionUID = 1L;
-	final int MAXKEYS = 31; 
+	final int MAXKEYS = 3; //31
 	final int middle = MAXKEYS/2;
 	int leftChildStartNumber; 
 	int rightChildStartNumber; 
@@ -29,8 +29,9 @@ public class Node<T extends Comparable<T>> implements Serializable{
 		{
 			return true;
 		}
-		else
+		else{
 			return false;
+		}
 	}//end isFull
 	
 	public void rootSplit(){
