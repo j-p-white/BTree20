@@ -20,18 +20,14 @@ public class Test {
 	}
 	
 	public static void testAdd(){
-		Node<String> myRoot = new Node<String>();
-		Node<String> temp = new Node<String>();
-		BTree<String> tree = new BTree<String>();
-			
-		tree.setRoot(myRoot);
+		BTree tree = new BTree();	
 		tree.insert("apple"); 
-		
-		temp = tree.getRoot();
-		
-		System.out.println("values of root: "+temp.keys);
-		
-		
+		tree.insert("sand");
+		tree.insert("math");
+		tree.insert("tree");
+		System.out.println("root: "+tree.getRoot().keys);
+		System.out.println("leftlink: "+tree.getRoot().links.get(0).keys);
+		System.out.println("rightlink: "+tree.getRoot().links.get(1).keys);
 	}
 	
 }//end class 

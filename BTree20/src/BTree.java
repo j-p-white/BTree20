@@ -1,25 +1,24 @@
 import java.io.Serializable;
 
 //and a new change
-public class BTree<T extends Comparable<T>> implements Serializable {
+public class BTree implements Serializable {
 	private static final long serialVersionUID = 1L;
-	Node<T> root;
+	Node root;
 	
 	public BTree(){
-		
+		root = new Node();
 	}// end BTree
 	
-	public void insert(T value){
+	public void insert(String value){
 		if(root.isFull()){
 			root.rootSplit();
-			insert(value);
 		}
-		else //call private add 
-			insert(root, value);
+			insert(root, value);	
 	}//end public add 
 	
-	private void insert(Node<T> node,T val){
-		Node<T> link = new Node<T>();
+	private void insert(Node node,String val){
+		int count= 0;
+		Node link = new Node();
 		if(node.isLeaf())
 		{
 			if(node.isFull())
@@ -28,19 +27,26 @@ public class BTree<T extends Comparable<T>> implements Serializable {
 			}//end if
 			else
 			{
-				//this will end the method
-				node.keys.add(val);
+				for(String letter: node.keys){
+					if(val.compareTo(letter)>0){
+						count++;
+					}
+					else{
+						break;
+					}
+				}//end for
+				node.keys.add(count,val);
 			}//end else
 		}// end leaf case
 		else
 		{
 				link = findLink(node,val);
 				insert(link,val);
-				node.split(link);
+				//node.split(link); not sure what this is about
 		}
 	}//end private insert
 	
-	public boolean search(T val){
+	public boolean search(String val){
 		boolean result = true;
 		if(root.keys.contains(val)){
 			result = true;
@@ -51,13 +57,13 @@ public class BTree<T extends Comparable<T>> implements Serializable {
 		return result;
 	}//end method
 	
-	private boolean search(Node<T> node, T value){
+	private boolean search(Node node, String value){
 		boolean found = true;
 		if(node.isLeaf()){
 			found = false;
 		}
 		else{
-		 Node<T> temp;
+		 Node temp;
 		 temp = findLink(node, value);
 		 if(temp.keys.contains(value)){
 			 found = true;
@@ -68,10 +74,10 @@ public class BTree<T extends Comparable<T>> implements Serializable {
 		}//end link else 
 		return found;
 	}
-	public Node<T> findLink(Node<T> node, T value){
+	public Node findLink(Node node, String value){
 		int count = 0;
-		for(T w: node.keys){
-			if(compare(w, value)>0){
+		for(String w: node.keys){
+			if(w.compareTo(value)>0){
 				count++;
 			}//end if
 			else{
@@ -80,15 +86,8 @@ public class BTree<T extends Comparable<T>> implements Serializable {
 		}// end for
 			return node.links.get(count);
 	}//end find value
-	public int compare(T obj1,T obj2){
-		return obj1.compareTo(obj2);
-	}
-	
-	public Node<T> getRoot(){
+	public Node getRoot(){
 		return root;
 	}
 	
-	public void setRoot(Node<T> node){
-		root = node;
-	}
 }//end class

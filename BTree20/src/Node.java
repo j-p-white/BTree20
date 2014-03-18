@@ -1,17 +1,13 @@
 import java.io.Serializable;
 import java.util.ArrayList;
 //this class needs to the same type as the BTree some how
-public class Node<T extends Comparable<T>> implements Serializable{
+public class Node implements Serializable{
 	private static final long serialVersionUID = 1L;
 	final int MAXKEYS = 3; //31
 	final int middle = MAXKEYS/2;
-	int leftChildStartNumber; 
-	int rightChildStartNumber; 
-	int myPosition;
-	
-	ArrayList<T> keys = new ArrayList<T>(); 
-	ArrayList<Node<T>> links = new ArrayList<Node<T>>();
-	
+	ArrayList<String> keys = new ArrayList<String>(); 
+	ArrayList<Node> links = new ArrayList<Node>();
+	int splitCount= 0;
 	public Node(){
 		
 	}
@@ -35,9 +31,10 @@ public class Node<T extends Comparable<T>> implements Serializable{
 	}//end isFull
 	
 	public void rootSplit(){
+		splitCount = splitCount +1;
 		int mid = middle;
-		Node<T> left = new Node<T>(); 
-		Node<T> right = new Node<T> ();
+		Node left = new Node(); 
+		Node right = new Node();
 		
 		//get all the left keys
 		for(int i =0; i < mid;i++){
@@ -51,9 +48,9 @@ public class Node<T extends Comparable<T>> implements Serializable{
 		links.add(right);
 	}//end split root
 	
-	public void split(Node<T> link){
-		Node<T> right = new Node<T>();
-		T middleVal;
+	public void split(Node link){
+		Node right = new Node();
+		String middleVal;
 		int count = 0;
 		//get right
 		while(link.keys.size()> middle+1){
@@ -63,8 +60,8 @@ public class Node<T extends Comparable<T>> implements Serializable{
 		middleVal= link.keys.remove(link.keys.size()-1);
 		
 		//compare the keys to the middle guy
-		for(T value: keys){
-			if(compare(middleVal,value)>0){
+		for(String value: keys){
+			if(middleVal.compareTo(value)>0){
 				count++;
 			}
 		}
@@ -72,8 +69,4 @@ public class Node<T extends Comparable<T>> implements Serializable{
 		keys.add(count,middleVal); 
 		links.add(count+1,right);
 	}//end split
-	
-	public int compare(T obj1,T obj2){
-		return obj1.compareTo(obj2);
-	}
-}	//end node
+}//end node
