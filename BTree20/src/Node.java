@@ -7,7 +7,6 @@ public class Node implements Serializable{
 	final int middle = MAXKEYS/2;
 	ArrayList<String> keys = new ArrayList<String>(); 
 	ArrayList<Node> links = new ArrayList<Node>();
-	int splitCount= 0;
 	public Node(){
 		
 	}
@@ -30,24 +29,6 @@ public class Node implements Serializable{
 		}
 	}//end isFull
 	
-	public void rootSplit(){
-		splitCount = splitCount +1;
-		int mid = middle;
-		Node left = new Node(); 
-		Node right = new Node();
-		
-		//get all the left keys
-		for(int i =0; i < mid;i++){
-			left.keys.add(keys.remove(i));
-		}
-		//get all the keys from the right
-		while(keys.size() >1){
-			right.keys.add(keys.remove(1));
-		}
-		links.add(left);
-		links.add(right);
-	}//end split root
-	
 	public void split(Node link){
 		Node right = new Node();
 		String middleVal;
@@ -69,4 +50,50 @@ public class Node implements Serializable{
 		keys.add(count,middleVal); 
 		links.add(count+1,right);
 	}//end split
+	
+	public void rootSplit(){
+		Node myLeft = makeNewLeft();
+		Node myRight = makeNewRight();
+		if(!links.isEmpty()){
+			addLeftLinks(myLeft); 
+			addRightLinks(myRight);
+		}
+		hookLinks(myLeft,myRight);
+	}//end split root
+	
+	private Node makeNewLeft(){
+		int mid = middle;
+		Node left = new Node(); 
+		//get all the left keys
+		for(int i =0; i < mid;i++){
+			left.keys.add(keys.remove(i));
+		}//end for
+		return left;
+	}// end makeNewLeft
+	
+	private void addLeftLinks(Node left){
+		int mid = middle+1; 
+		for(int i =0; i<mid;i++){
+			left.links.add(links.remove(0));
+		}//end for
+	}//end add left links
+	
+	private Node makeNewRight(){
+		Node right = new Node();
+		//get all the keys from the right
+		while(keys.size() >1){
+			right.keys.add(keys.remove(1));
+		}
+		return right;
+	}// end makeNewRight
+	
+	private void addRightLinks(Node right){
+			right.links.addAll(links);
+			links.clear();
+	}//end add right links
+	
+	private void hookLinks(Node left,Node right){
+		links.add(left);
+		links.add(right);
+	}
 }//end node

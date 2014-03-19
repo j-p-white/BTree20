@@ -25,9 +25,17 @@ public class Test {
 		tree.insert("sand");
 		tree.insert("math");
 		tree.insert("tree");
+		tree.insert("north");
+		tree.insert("onion");
+		tree.insert("pan");
+		tree.insert("pink");
+		tree.insert("pool"); 
 		System.out.println("root: "+tree.getRoot().keys);
-		System.out.println("leftlink: "+tree.getRoot().links.get(0).keys);
-		System.out.println("rightlink: "+tree.getRoot().links.get(1).keys);
+		System.out.println("left: "+tree.getRoot().links.get(0).keys);
+		System.out.println("midL: "+tree.getRoot().links.get(1).keys);
+		System.out.println("midR: "+tree.getRoot().links.get(2).keys);
+		System.out.println("right: "+tree.getRoot().links.get(3).keys);
+
 	}
 	
 }//end class 

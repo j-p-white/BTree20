@@ -18,32 +18,30 @@ public class BTree implements Serializable {
 	
 	private void insert(Node node,String val){
 		int count= 0;
-		Node link = new Node();
+		Node temp = new Node();
 		if(node.isLeaf())
 		{
-			if(node.isFull())
-			{
-				 return;
-			}//end if
-			else
-			{
-				for(String letter: node.keys){
-					if(val.compareTo(letter)>0){
-						count++;
-					}
-					else{
-						break;
-					}
-				}//end for
-				node.keys.add(count,val);
-			}//end else
+			for(String letter: node.keys){
+				if(val.compareTo(letter)>0){
+					count++;
+				}
+				else{
+					break;
+				}
+			}//end for
+			node.keys.add(count,val);
 		}// end leaf case
 		else
 		{
-				link = findLink(node,val);
-				insert(link,val);
-				//node.split(link); not sure what this is about
-		}
+			for(Node aLink: node.links){
+				if(aLink.isFull()){
+					node.split(aLink);
+					break;
+				}
+			}//end for
+			temp = findLink(node,val);
+			insert(temp,val);
+		}// end else
 	}//end private insert
 	
 	public boolean search(String val){
@@ -77,7 +75,7 @@ public class BTree implements Serializable {
 	public Node findLink(Node node, String value){
 		int count = 0;
 		for(String w: node.keys){
-			if(w.compareTo(value)>0){
+			if(value.compareTo(w)>0){
 				count++;
 			}//end if
 			else{
@@ -89,5 +87,4 @@ public class BTree implements Serializable {
 	public Node getRoot(){
 		return root;
 	}
-	
 }//end class
