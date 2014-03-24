@@ -3,7 +3,8 @@ public class Test {
 
 	public static void main(String[] args) {
 		//JsoupTestStringManipulating();
-		testAdd();
+		//testAdd();
+		testFindPredecessor();
 
 	}
 	
@@ -37,5 +38,18 @@ public class Test {
 		System.out.println("right: "+tree.getRoot().links.get(3).keys);
 
 	}
+	public static void testFindPredecessor(){
+		BTree tree = new BTree();
+		tree.insert("apple"); 
+		tree.insert("sand");
+		tree.insert("math");
+		tree.insert("tree");
+		tree.insert("north");
+		tree.insert("onion");
+		tree.insert("pan");
+		tree.insert("pink");
+		tree.insert("pool"); 
+	}
+	
 	
 }//end class 

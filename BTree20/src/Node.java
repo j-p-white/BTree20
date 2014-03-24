@@ -96,4 +96,77 @@ public class Node implements Serializable{
 		links.add(left);
 		links.add(right);
 	}
+	
+	public void repair(int count){
+		if(links.get(count -1).keys.size() > middle && count > 0){
+			rotateLeft(count);
+		}
+		else if(links.get(count+1).keys.size() > middle){
+			rotateRight(count);
+		}
+		else{
+			merge(count);
+		}
+	}// end steal
+	// may need to get the link before i remove the key
+	private void rotateLeft(int count){
+		String parentKey;
+		String replaceKey;
+		// the parent key
+		parentKey = keys.remove(count);
+		// parent key is placed in deficient right node brining it to minimum
+		links.get(count +1).keys.add(0,parentKey);
+		// get the key from the over full left node
+		replaceKey = links.get(count -1).keys.remove(keys.size()-1);
+		//put the new key in the proper spot.
+		keys.add(count,replaceKey);	
+	}
+	
+	private void rotateRight(int count){
+		String parentKey;
+		String replaceKey;
+		//the parent key
+		parentKey = keys.remove(count);
+		//parent key is placed in deficient left node brining it to minimum
+		links.get(count-1).keys.add(parentKey);
+		//get the key from the over full right node
+		replaceKey = links.get(count +1).keys.remove(0);
+		//put the new key in the proper spot 
+		keys.add(count,replaceKey);
+	}
+	
+	private void merge(int count){
+		String parentKey;
+		//get the parentKey
+		parentKey = keys.remove(count);
+		//put parentKey into right link 
+		links.get(count+1).keys.add(0,keys.remove(count));
+		// put the left links into the right link
+			// values 1st
+		for(String s: links.get(count -1).keys) {
+			links.get(count +1).keys.add(0,s);
+		}// end for
+			//left links go into rights links
+		for(Node Link: links.get(count -1).links){
+				links.get(count+1).links.add(0,Link);
+		}// end for
+	}// end merge
+	
+	public String  predacessor (int count){
+		Node temp = links.get(count);
+		return goRight(temp,count+1);
+	}
+	
+	public String goRight(Node myNode,int count){
+		String toReturn;
+		if(myNode.isLeaf()){
+		toReturn = myNode.keys.get(myNode.keys.size()-1);
+		}//end if
+		else{
+			toReturn = goRight(myNode.links.get(count),count);
+		}
+		return toReturn;
+	}
+	
+	
 }//end node
