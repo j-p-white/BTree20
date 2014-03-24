@@ -167,6 +167,14 @@ public class Node implements Serializable{
 		}
 		return toReturn;
 	}
-	
-	
+	public boolean minSize(){
+		boolean result; 
+		if(keys.size() < MAXKEYS/2){
+			result = true;
+		}
+		else{ 
+			result = false;
+		}
+		return result;
+	}// end minSize
 }//end node

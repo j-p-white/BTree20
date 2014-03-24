@@ -84,6 +84,43 @@ public class BTree implements Serializable {
 		}// end for
 			return node.links.get(count);
 	}//end find value
+	
+	public void delete(String value){
+		delete(root,value);
+	}
+	private void delete(Node node, String Val){
+		int count = 0;
+		int myCount = 0;
+		String predecessorVal;
+		if(node.keys.contains(Val)){
+			if(node.isLeaf()){
+				node.keys.remove(Val); 
+				return;
+			}
+			else{
+				//find the key value
+				for(String s:node.keys){
+					if(s.equalsIgnoreCase(s)){
+						break;
+					}
+						count++;
+				}// end for
+				predecessorVal = node.predacessor(count);
+				delete(node,predecessorVal);
+			}//end else
+		}
+		else{
+			delete(findLink(node,Val),Val);
+			for(Node n:node.links){
+				if(n.minSize()){
+					n.repair(myCount);
+				}// end if
+					myCount++;
+			}//end for
+			return;
+		}// end else
+	}// end delete
+	
 	public Node getRoot(){
 		return root;
 	}

@@ -8,7 +8,7 @@ public class Test {
 		//JsoupTestStringManipulating();
 		//testAdd();
 		//testSave();
-
+		testFindPredecessor();
 	}
 	
 	public static void JsoupTestStringManipulating(){
@@ -36,9 +36,12 @@ public class Test {
 		tree.insert("pool"); 
 		System.out.println("root: "+tree.getRoot().keys);
 		System.out.println("left: "+tree.getRoot().links.get(0).keys);
-		System.out.println("midL: "+tree.getRoot().links.get(1).keys);
-		System.out.println("midR: "+tree.getRoot().links.get(2).keys);
-		System.out.println("right: "+tree.getRoot().links.get(3).keys);
+		System.out.println("right: "+tree.getRoot().links.get(1).keys);
+		System.out.println(" left-left: "+tree.getRoot().links.get(0).links.get(0).keys);
+		System.out.println(" left-right: "+tree.getRoot().links.get(0).links.get(1).keys);
+		System.out.println(" right-left: "+tree.getRoot().links.get(1).links.get(0).keys);
+		System.out.println(" right-left: "+tree.getRoot().links.get(1).links.get(1).keys);
+		System.out.println("get predicessor: "+tree.getRoot().predacessor(0));
 
 	}
 	public static void testFindPredecessor(){
@@ -52,6 +55,7 @@ public class Test {
 		tree.insert("pan");
 		tree.insert("pink");
 		tree.insert("pool"); 
+		System.out.println("get predicessor: "+tree.getRoot().predacessor(0));
 	}	
 	public static void testSave(){
 		BTree tree = new BTree();	
