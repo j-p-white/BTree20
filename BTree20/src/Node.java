@@ -138,7 +138,7 @@ public class Node implements Serializable{
 	private void merge(int count){
 		String parentKey;
 		//get the parentKey
-		parentKey = keys.remove(count);
+		//parentKey = keys.remove(count);
 		//put parentKey into right link 
 		links.get(count+1).keys.add(0,keys.remove(count));
 		// put the left links into the right link
