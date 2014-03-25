@@ -9,7 +9,7 @@ public class Test {
 		//testAdd();
 		//testSave();
 		//testFindPredecessor();
-		  testDelete();
+		testDelete();
 	}
 	
 	public static void JsoupTestStringManipulating(){
@@ -35,6 +35,8 @@ public class Test {
 		tree.insert("pan");
 		tree.insert("pink");
 		tree.insert("pool"); 
+		tree.insert("net");
+		tree.insert("never");
 		System.out.println("root: "+tree.getRoot().keys);
 		System.out.println("left: "+tree.getRoot().links.get(0).keys);
 		System.out.println("right: "+tree.getRoot().links.get(1).keys);
@@ -42,7 +44,6 @@ public class Test {
 		System.out.println(" left-right: "+tree.getRoot().links.get(0).links.get(1).keys);
 		System.out.println(" right-left: "+tree.getRoot().links.get(1).links.get(0).keys);
 		System.out.println(" right-left: "+tree.getRoot().links.get(1).links.get(1).keys);
-		System.out.println("get predicessor: "+tree.getRoot().predacessor(0));
 
 	}
 	public static void testFindPredecessor(){
@@ -91,7 +92,10 @@ public class Test {
 		tree.insert("pan");
 		tree.insert("pink");
 		tree.insert("pool"); 
-		tree.delete("tree");
+		tree.insert("net");
+		tree.insert("never");
+		tree.delete("apple");
+		tree.delete("net");
 		
 		System.out.println("root: "+tree.getRoot().keys);
 		System.out.println("left: "+tree.getRoot().links.get(0).keys);
@@ -102,8 +106,4 @@ public class Test {
 		System.out.println(" right-left: "+tree.getRoot().links.get(1).links.get(1).keys);
 		
 	}
-	
-	
-	
-	
 }//end class 

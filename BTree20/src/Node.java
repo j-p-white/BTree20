@@ -98,7 +98,7 @@ public class Node implements Serializable{
 	}
 	
 	public void repair(int count){
-		if(links.get(count -1).keys.size() > middle && count > 0){
+		if(count != 0 && links.get(count -1).keys.size() > middle ){
 			rotateLeft(count);
 		}
 		else if(links.get(count+1).keys.size() > middle){
@@ -112,23 +112,34 @@ public class Node implements Serializable{
 	private void rotateLeft(int count){
 		String parentKey;
 		String replaceKey;
+		Node temp;
+		
+		int apple =links.get(count -1).keys.size()-1;
+		
+		//get the link to the deficient right node
+		temp =links.get(count);
+		
 		// the parent key
-		parentKey = keys.remove(count);
+		parentKey = keys.remove(count -1 );
+
 		// parent key is placed in deficient right node brining it to minimum
-		links.get(count +1).keys.add(0,parentKey);
+		temp.keys.add(0,parentKey);
+		
 		// get the key from the over full left node
-		replaceKey = links.get(count -1).keys.remove(keys.size()-1);
+		replaceKey = links.get(count -1).keys.remove(apple);
+		
 		//put the new key in the proper spot.
-		keys.add(count,replaceKey);	
+		keys.add(count -1,replaceKey);	
 	}
 	
 	private void rotateRight(int count){
 		String parentKey;
 		String replaceKey;
+		Node temp = links.get(count);
 		//the parent key
 		parentKey = keys.remove(count);
 		//parent key is placed in deficient left node brining it to minimum
-		links.get(count-1).keys.add(parentKey);
+		temp.keys.add(parentKey);
 		//get the key from the over full right node
 		replaceKey = links.get(count +1).keys.remove(0);
 		//put the new key in the proper spot 
@@ -140,7 +151,7 @@ public class Node implements Serializable{
 		//get the parentKey
 		parentKey = keys.remove(count);
 		//put parentKey into right link 
-		links.get(count+1).keys.add(0,keys.remove(count));
+		links.get(count+1).keys.add(0,parentKey);
 		// put the left links into the right link
 			// values 1st
 		for(String s: links.get(count -1).keys) {

@@ -32,13 +32,13 @@ public class BTree implements Serializable {
 			node.keys.add(count,val);
 		}// end leaf case
 		else
-		{
-			for(Node aLink: node.links){
-				if(aLink.isFull()){
-					node.split(aLink);
-					break;
-				}
-			}//end for
+		{	
+				for(int i =0;i < node.links.size();i++){
+					if(node.links.get(i).isFull()){
+						node.split(node.links.get(i));
+						i = 0;
+					}//end if
+				}//end for
 			temp = findLink(node,val);
 			insert(temp,val);
 		}// end else
