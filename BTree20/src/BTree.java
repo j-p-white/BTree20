@@ -84,9 +84,15 @@ public class BTree implements Serializable {
 		}// end for
 			return node.links.get(count);
 	}//end find value
-	
+
+	// i am trying to find links in the node i deleted instead of the nodes parent
 	public void delete(String value){
-		delete(root,value);
+	  if(search(value)){
+		  delete(root,value);
+	  }
+	  else {
+		  System.out.println("this value is not real");
+	  }	
 	}
 	private void delete(Node node, String Val){
 		int count = 0;
@@ -113,7 +119,7 @@ public class BTree implements Serializable {
 			delete(findLink(node,Val),Val);
 			for(Node n:node.links){
 				if(n.minSize()){
-					n.repair(myCount);
+					node.repair(myCount);
 				}// end if
 					myCount++;
 			}//end for

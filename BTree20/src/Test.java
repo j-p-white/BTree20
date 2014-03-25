@@ -8,7 +8,8 @@ public class Test {
 		//JsoupTestStringManipulating();
 		//testAdd();
 		//testSave();
-		testFindPredecessor();
+		//testFindPredecessor();
+		  testDelete();
 	}
 	
 	public static void JsoupTestStringManipulating(){
@@ -79,6 +80,30 @@ public class Test {
 			ex.printStackTrace();
 		}
 	}// end save test
+	public static void testDelete(){
+		BTree tree = new BTree();
+		tree.insert("apple"); 
+		tree.insert("sand");
+		tree.insert("math");
+		tree.insert("tree");
+		tree.insert("north");
+		tree.insert("onion");
+		tree.insert("pan");
+		tree.insert("pink");
+		tree.insert("pool"); 
+		tree.delete("tree");
+		
+		System.out.println("root: "+tree.getRoot().keys);
+		System.out.println("left: "+tree.getRoot().links.get(0).keys);
+		System.out.println("right: "+tree.getRoot().links.get(1).keys);
+		System.out.println(" left-left: "+tree.getRoot().links.get(0).links.get(0).keys);
+		System.out.println(" left-right: "+tree.getRoot().links.get(0).links.get(1).keys);
+		System.out.println(" right-left: "+tree.getRoot().links.get(1).links.get(0).keys);
+		System.out.println(" right-left: "+tree.getRoot().links.get(1).links.get(1).keys);
+		
+	}
+	
+	
 	
 	
 }//end class 
