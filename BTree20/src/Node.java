@@ -97,6 +97,34 @@ public class Node implements Serializable{
 		links.add(right);
 	}
 	
+	public void internalRepair(int count){
+		Node temp;
+		temp = links.get(count);
+		goRightRepair(temp,count+1);
+		for(int i = 0; i < links.size();i++){
+			if(links.get(i).minSize()){
+				repair(i);
+				i = 0;
+			}
+		}
+	}// end internalRepair
+	
+	//will repair upto the internal node
+	public void goRightRepair(Node myNode,int count){
+		if(myNode.isLeaf()){
+			return;
+		}//end if
+		else{
+			goRightRepair(myNode.links.get(count),count);
+			for(int i = 0; i < links.size();i++){
+				if(links.get(i).minSize()){
+					repair(i);
+					i = 0;
+				}
+			}
+		}
+	}
+	
 	public void repair(int count){
 		if(count != 0 && links.get(count -1).keys.size() > middle ){
 			rotateLeft(count);
@@ -148,22 +176,26 @@ public class Node implements Serializable{
 	
 	private void merge(int count){
 		String parentKey;
+		Node temp;
+		
+		temp = links.get(count+1);
+		
 		//get the parentKey
 		parentKey = keys.remove(count);
+		
 		//put parentKey into right link 
-		links.get(count+1).keys.add(0,parentKey);
-		// put the left links into the right link
-			// values 1st
-		for(String s: links.get(count -1).keys) {
-			links.get(count +1).keys.add(0,s);
+		temp.keys.add(0,parentKey);
+			// put left values into right values
+		for(String s: links.get(count).keys) {
+			temp.keys.add(0,s);
 		}// end for
 			//left links go into rights links
-		for(Node Link: links.get(count -1).links){
-				links.get(count+1).links.add(0,Link);
+		for(Node Link: links.get(count).links){
+				temp.links.add(0,Link);
 		}// end for
 	}// end merge
 	
-	public String  predacessor (int count){
+	public String predacessor(int count){
 		Node temp = links.get(count);
 		return goRight(temp,count+1);
 	}
@@ -171,7 +203,7 @@ public class Node implements Serializable{
 	public String goRight(Node myNode,int count){
 		String toReturn;
 		if(myNode.isLeaf()){
-		toReturn = myNode.keys.get(myNode.keys.size()-1);
+		toReturn = myNode.keys.remove(myNode.keys.size()-1);
 		}//end if
 		else{
 			toReturn = goRight(myNode.links.get(count),count);

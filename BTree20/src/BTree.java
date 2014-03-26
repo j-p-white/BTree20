@@ -112,7 +112,8 @@ public class BTree implements Serializable {
 						count++;
 				}// end for
 				predecessorVal = node.predacessor(count);
-				delete(node,predecessorVal);
+				node.keys.set(count, predecessorVal); 
+				node.internalRepair(count);
 			}//end else
 		}
 		else{
