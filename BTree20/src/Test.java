@@ -40,10 +40,12 @@ public class Test {
 		System.out.println("root: "+tree.getRoot().keys);
 		System.out.println("left: "+tree.getRoot().links.get(0).keys);
 		System.out.println("right: "+tree.getRoot().links.get(1).keys);
-		System.out.println(" left-left: "+tree.getRoot().links.get(0).links.get(0).keys);
-		System.out.println(" left-right: "+tree.getRoot().links.get(0).links.get(1).keys);
-		System.out.println(" right-left: "+tree.getRoot().links.get(1).links.get(0).keys);
-		System.out.println(" right-left: "+tree.getRoot().links.get(1).links.get(1).keys);
+		System.out.println(" left 0: "+tree.getRoot().links.get(0).links.get(0).keys);
+		System.out.println(" left 1: "+tree.getRoot().links.get(0).links.get(1).keys);
+		System.out.println(" left 2: "+tree.getRoot().links.get(0).links.get(2).keys);
+		System.out.println(" right 0: "+tree.getRoot().links.get(1).links.get(0).keys);
+		System.out.println(" right 1: "+tree.getRoot().links.get(1).links.get(1).keys);
+		System.out.println(" right 2: "+tree.getRoot().links.get(1).links.get(2).keys);
 
 	}
 	public static void testFindPredecessor(){
@@ -95,12 +97,15 @@ public class Test {
 		tree.insert("net");
 		tree.insert("never");
 		tree.delete("apple");
-		tree.delete("net");
-		tree.delete("math");
 		
 		System.out.println("root: "+tree.getRoot().keys);
 		System.out.println("left: "+tree.getRoot().links.get(0).keys);
-		System.out.println("mid: "+tree.getRoot().links.get(1).keys);
-		System.out.println("right: "+tree.getRoot().links.get(2).keys);
+		System.out.println("right: "+tree.getRoot().links.get(1).keys);
+		System.out.println(" left 0: "+tree.getRoot().links.get(0).links.get(0).keys);
+		System.out.println(" left 1: "+tree.getRoot().links.get(0).links.get(1).keys);
+		//System.out.println(" left 2: "+tree.getRoot().links.get(0).links.get(2).keys);
+		System.out.println(" right 0: "+tree.getRoot().links.get(1).links.get(0).keys);
+		System.out.println(" right 1: "+tree.getRoot().links.get(1).links.get(1).keys);
+		System.out.println(" right 2: "+tree.getRoot().links.get(1).links.get(2).keys);
 	}
 }//end class 
