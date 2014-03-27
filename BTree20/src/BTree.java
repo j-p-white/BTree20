@@ -89,6 +89,10 @@ public class BTree implements Serializable {
 	public void delete(String value){
 	  if(search(value)){
 		  delete(root,value);
+		  if(root.keys.size() == 0){
+		  // reset root
+			  newRoot();
+		  }
 	  }
 	  else {
 		  System.out.println("this value is not real");
@@ -131,4 +135,12 @@ public class BTree implements Serializable {
 	public Node getRoot(){
 		return root;
 	}
+	
+	public void newRoot(){
+		Node temp ;
+		temp = root.links.get(0);
+		root.links.clear();
+		root = temp;
+	}
+	
 }//end class

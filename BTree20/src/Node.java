@@ -193,6 +193,8 @@ public class Node implements Serializable{
 		for(Node Link: links.get(count).links){
 				temp.links.add(0,Link);
 		}// end for
+		
+		links.remove(count);
 	}// end merge
 	
 	public String predacessor(int count){

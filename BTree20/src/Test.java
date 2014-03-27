@@ -99,17 +99,8 @@ public class Test {
 		tree.delete("math");
 		
 		System.out.println("root: "+tree.getRoot().keys);
-		//System.out.println("left: "+tree.getRoot().links.get(0).keys);
-		System.out.println("right: "+tree.getRoot().links.get(1).keys);
-		System.out.println("right - 0: "+tree.getRoot().links.get(1).links.get(0).keys);
-		System.out.println("right - 1: "+tree.getRoot().links.get(1).links.get(1).keys);
-		System.out.println("right - 2: "+tree.getRoot().links.get(1).links.get(2).keys);
-		System.out.println("right - 3: "+tree.getRoot().links.get(1).links.get(3).keys);
-		
-	//	System.out.println(" left-left: "+tree.getRoot().links.get(0).links.get(0).keys);
-	//	System.out.println(" left-right: "+tree.getRoot().links.get(0).links.get(1).keys);
-	//	System.out.println(" right-left: "+tree.getRoot().links.get(1).links.get(0).keys);
-	//	System.out.println(" right-left: "+tree.getRoot().links.get(1).links.get(1).keys);
-		
+		System.out.println("left: "+tree.getRoot().links.get(0).keys);
+		System.out.println("mid: "+tree.getRoot().links.get(1).keys);
+		System.out.println("right: "+tree.getRoot().links.get(2).keys);
 	}
 }//end class 
