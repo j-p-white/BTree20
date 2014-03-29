@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.util.ArrayList;
 
 //and a new change
 public class BTree implements Serializable {
@@ -150,4 +151,43 @@ public class BTree implements Serializable {
 		root = temp;
 	}
 	
+	public ArrayList<String> findPrefix(String Pre){
+		return findPrefix(root,Pre);
+	}
+	
+	private ArrayList<String> findPrefix(Node node, String Pre){
+		int foundCount;
+		ArrayList<String> LinkValueList = new ArrayList<String>();
+		ArrayList<String> myList = new ArrayList<String>();
+		for(int i =0; i < node.keys.size();i++){
+			if(node.keys.get(i).startsWith(Pre)){
+				foundCount = i; 
+				for(int j =i; j < node.keys.size();j++){
+					if(node.keys.get(j).startsWith(Pre)){
+						myList.add(node.keys.get(j));
+					}// end if
+				}//end for
+				 LinkValueList = collectLinks(node, foundCount,Pre);
+				 	myList.addAll(LinkValueList);
+					return myList;
+			}// end if
+			else if(node.keys.get(i).compareTo(Pre) >0 && !node.isLeaf()){
+			myList.addAll( findPrefix(node.links.get(i),Pre));
+			}//end else
+		}//end for
+		return myList;
+	}// end findPrefix
+	
+	public ArrayList<String>collectLinks(Node node, int count, String Pre){
+		ArrayList<String> array = new ArrayList<String>();
+		for(int i =count; i < node.links.size();i++){
+			array = collectLinks(node.links.get(i), i,Pre);
+		}
+		for(String key: node.keys){
+			if(key.startsWith(Pre)){
+				array.add(key);
+			}// end if
+		}// end for
+		return array;
+	}
 }//end class
