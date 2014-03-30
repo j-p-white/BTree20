@@ -9,7 +9,8 @@ public class Test {
 		//testAdd();
 		//testSave();
 		//testFindPredecessor();
-		testDelete();
+		//testDelete();
+		testPrefexFind();
 	}
 	
 	public static void JsoupTestStringManipulating(){
@@ -108,4 +109,22 @@ public class Test {
 		System.out.println(" right 1: "+tree.getRoot().links.get(1).links.get(1).keys);
 		System.out.println(" right 2: "+tree.getRoot().links.get(1).links.get(2).keys);
 	}
+	
+	public static void testPrefexFind(){
+		BTree tree = new BTree();	
+		tree.insert("apple"); 
+		tree.insert("sand");
+		tree.insert("math");
+		tree.insert("tree");
+		tree.insert("north");
+		tree.insert("onion");
+		tree.insert("pan");
+		tree.insert("pink");
+		tree.insert("pool"); 
+		tree.insert("net");
+		tree.insert("never");
+		
+		System.out.println(tree.findPrefix("n"));
+	}//end prefex test
+	
 }//end class 
