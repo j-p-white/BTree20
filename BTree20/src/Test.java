@@ -124,7 +124,7 @@ public class Test {
 		tree.insert("net");
 		tree.insert("never");
 		
-		System.out.println(tree.findPrefix("n"));
+		System.out.println(tree.findPrefix("o"));
 	}//end prefex test
 	
 }//end class 

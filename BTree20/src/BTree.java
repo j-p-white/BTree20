@@ -156,31 +156,42 @@ public class BTree implements Serializable {
 	}
 	
 	private ArrayList<String> findPrefix(Node node, String Pre){
-		ArrayList<String> LinkValueList = new ArrayList<String>();
-		ArrayList<String> myList = new ArrayList<String>();
-		for(int i =0; i < node.keys.size();i++){
-			if(node.keys.get(i).startsWith(Pre)){
-					 myList.add(node.keys.get(i));
-					 LinkValueList = collectLinks(node.links.get(i),Pre);
-					 myList.addAll(LinkValueList);
-			}// end if
-			else if(node.keys.get(i).compareTo(Pre) >0 && !node.isLeaf()){
-				myList.addAll( findPrefix(node.links.get(i),Pre));
-			}//end else
-		}//end for
-		return myList;
+		ArrayList<String> valueList = new ArrayList<String>();
+		for(int i = 0; i < node.keys.size();i++){
+			if(node.keys.get(i).startsWith(Pre)||node.keys.get(i).compareTo(Pre)>0){
+				if(!node.isLeaf()){
+					checkLists(valueList,findPrefix(node.links.get(i),Pre));
+					//if(node.links.get(i +1)!= null){
+					// valueList.addAll(findPrefix(node.links.get(i+1),Pre));
+					//}
+				}
+				if(!node.isLeaf() && node.links.get(i +1)!= null){
+					checkLists(valueList,findPrefix(node.links.get(i+1),Pre));
+				}
+				if(node.keys.get(i).startsWith(Pre)){
+					if(!valueList.contains(node.keys.get(i))){
+						valueList.add(node.keys.get(i));
+					}
+				}// end three if's
+				
+			}// end big if 
+			else if(i == node.keys.size()-1){
+				if(!node.isLeaf() && node.links.get(i+1)!=null){ // Potently issue
+					valueList.addAll(findPrefix(node.links.get(i+1),Pre));
+				}//end one last check if 
+			}// end end-of-rope else
+		}// end for
+		return valueList;
 	}// end findPrefix
 	
-	public ArrayList<String>collectLinks(Node node, String Pre){
-		ArrayList<String> array = new ArrayList<String>();
-		 if(!node.isLeaf()){
-			array = collectLinks(node.links.get(0), Pre);
-		 }
-		for(String key: node.keys){
-			if(key.startsWith(Pre)){
-				array.add(key);
-			}// end if
+	private void checkLists(ArrayList<String>valueList,ArrayList<String> tempList){
+		for(String s:tempList){
+			if(valueList.contains(s)){
+				//dont add it 
+			}
+			else{
+				valueList.add(s);
+			}
 		}// end for
-		return array;
-	}//end collectLinks
+	}//end checkList
 }//end class
