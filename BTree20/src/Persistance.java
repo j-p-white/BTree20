@@ -34,11 +34,12 @@ public class Persistance {
 				String s = new String(temp);
 				myTemp.keys.add(s);
 		}// end for
-		
-		for(int j = 0; j < myTemp.MAXKEYS +1;j++){
+	  if(myTemp.links.size()!=0){
+		 for(int j = 0; j < myTemp.MAXKEYS +1;j++){
 			 long l = raf.readLong();
 			 myTemp.links.get(j).setStartIndex(l);
 		}// end for
+	  }//end if
 		return myTemp;
 	}// end method	
-}
+}// end persistance

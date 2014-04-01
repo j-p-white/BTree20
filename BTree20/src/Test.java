@@ -2,15 +2,18 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.RandomAccessFile;
 public class Test {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		//JsoupTestStringManipulating();
 		//testAdd();
 		//testSave();
 		//testFindPredecessor();
 		//testDelete();
-		testPrefexFind();
+		//testPrefexFind();
+		testPersist();
+		
 	}
 	
 	public static void JsoupTestStringManipulating(){
@@ -126,5 +129,21 @@ public class Test {
 		
 		System.out.println(tree.findPrefix("s"));
 	}//end prefex test
+	
+	public static void testPersist() throws IOException{
+		Persistance pers = new Persistance();
+		RandomAccessFile raf = new RandomAccessFile("myFile.dat","rw");
+		Node node = new Node(); 
+		
+		node.setStartIndex(0);
+		node.keys.add("apple");
+		node.keys.add("sand"); 
+		node.keys.add("onions");
+		pers.write(raf, node); 
+		
+		for(String s:pers.read(raf, 0).keys){
+			System.out.println(s);
+		}
+	}
 	
 }//end class 
