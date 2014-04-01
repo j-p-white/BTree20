@@ -7,6 +7,8 @@ public class Node implements Serializable{
 	final int middle = MAXKEYS/2;
 	ArrayList<String> keys = new ArrayList<String>(); 
 	ArrayList<Node> links = new ArrayList<Node>();
+	long startIndex;
+	long incrementSize =1280;
 	public Node(){
 		
 	}
@@ -222,4 +224,12 @@ public class Node implements Serializable{
 		}
 		return result;
 	}// end minSize
+	
+	public void setStartIndex(int startIndex){
+		this.startIndex = startIndex;
+	}
+	
+	public long getStartIndex(){
+		return startIndex;
+	}
 }//end node
