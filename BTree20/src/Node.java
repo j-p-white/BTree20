@@ -225,7 +225,7 @@ public class Node implements Serializable{
 		return result;
 	}// end minSize
 	
-	public void setStartIndex(int startIndex){
+	public void setStartIndex(long startIndex){
 		this.startIndex = startIndex;
 	}
 	
