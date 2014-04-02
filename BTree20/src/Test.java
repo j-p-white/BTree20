@@ -2,7 +2,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.RandomAccessFile;
 public class Test {
 
 	public static void main(String[] args) throws IOException {
@@ -13,7 +12,6 @@ public class Test {
 		//testDelete();
 		//testPrefexFind();
 		testPersist();
-		
 	}
 	
 	public static void JsoupTestStringManipulating(){
@@ -28,7 +26,7 @@ public class Test {
 		System.out.println(pars.getPadding(word.length()));
 	}
 	
-	public static void testAdd(){
+	public static void testAdd() throws IOException{
 		BTree tree = new BTree();	
 		tree.insert("apple"); 
 		tree.insert("sand");
@@ -50,9 +48,10 @@ public class Test {
 		System.out.println(" right 0: "+tree.getRoot().links.get(1).links.get(0).keys);
 		System.out.println(" right 1: "+tree.getRoot().links.get(1).links.get(1).keys);
 		System.out.println(" right 2: "+tree.getRoot().links.get(1).links.get(2).keys);
+		System.out.println("node count: "+tree.getNodeCount());
 
 	}
-	public static void testFindPredecessor(){
+	public static void testFindPredecessor() throws IOException{
 		BTree tree = new BTree();
 		tree.insert("apple"); 
 		tree.insert("sand");
@@ -65,7 +64,7 @@ public class Test {
 		tree.insert("pool"); 
 		System.out.println("get predicessor: "+tree.getRoot().predacessor(0));
 	}	
-	public static void testSave(){
+	public static void testSave() throws IOException{
 		BTree tree = new BTree();	
 		tree.insert("apple"); 
 		tree.insert("sand");
@@ -87,7 +86,7 @@ public class Test {
 			ex.printStackTrace();
 		}
 	}// end save test
-	public static void testDelete(){
+	public static void testDelete() throws IOException{
 		BTree tree = new BTree();
 		tree.insert("apple"); 
 		tree.insert("sand");
@@ -113,7 +112,7 @@ public class Test {
 		System.out.println(" right 2: "+tree.getRoot().links.get(1).links.get(2).keys);
 	}
 	
-	public static void testPrefexFind(){
+	public static void testPrefexFind() throws IOException{
 		BTree tree = new BTree();	
 		tree.insert("apple"); 
 		tree.insert("sand");
@@ -131,19 +130,28 @@ public class Test {
 	}//end prefex test
 	
 	public static void testPersist() throws IOException{
-		Persistance pers = new Persistance();
-		RandomAccessFile raf = new RandomAccessFile("myFile.dat","rw");
-		Node node = new Node(); 
+		BTree tree = new BTree();	
+		tree.insert("apple"); 
+		tree.insert("sand");
+		tree.insert("math");
+		tree.insert("tree");
+		tree.insert("north");
+		tree.insert("onion");
+		tree.insert("pan");
+		tree.insert("pink");
+		tree.insert("pool"); 
+		tree.insert("net");
+		tree.insert("never");
 		
-		node.setStartIndex(0);
-		node.keys.add("apple");
-		node.keys.add("sand"); 
-		node.keys.add("onions");
-		pers.write(raf, node); 
-		
-		for(String s:pers.read(raf, 0).keys){
-			System.out.println(s);
-		}
+			System.out.println("root: "+tree.getRoot().getStartIndex());
+			System.out.println("left: "+tree.getRoot().links.get(0).getStartIndex());
+			System.out.println("right: "+tree.getRoot().links.get(1).getStartIndex());
+			System.out.println(" left 0: "+tree.getRoot().links.get(0).links.get(0).getStartIndex());
+			System.out.println(" left 1: "+tree.getRoot().links.get(0).links.get(1).getStartIndex());
+			System.out.println(" left 2: "+tree.getRoot().links.get(0).links.get(2).getStartIndex());
+			System.out.println(" right 0: "+tree.getRoot().links.get(1).links.get(0).getStartIndex());
+			System.out.println(" right 1: "+tree.getRoot().links.get(1).links.get(1).getStartIndex());
+			System.out.println(" right 2: "+tree.getRoot().links.get(1).links.get(2).getStartIndex());
 	}
 	
 }//end class 

@@ -1,3 +1,6 @@
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -5,19 +8,30 @@ import java.util.ArrayList;
 public class BTree implements Serializable {
 	private static final long serialVersionUID = 1L;
 	Node root;
+	int nodeCount;
+	RandomAccessFile raf;
 	
 	public BTree(){
 		root = new Node();
+		root.setStartIndex(0);
+		nodeCount = 1;
+		try {
+			raf = new RandomAccessFile("Btree.dat","rw");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}// end BTree
 	
-	public void insert(String value){
+	public void insert(String value) throws IOException{
 		if(root.isFull()){
-			root.rootSplit();
+			nodeCount = nodeCount +2;
+			root.rootSplit(nodeCount,raf);
 		}
 			insert(root, value);	
 	}//end public add 
 	
-	private void insert(Node node,String val){
+	private void insert(Node node,String val) throws IOException{
 		int count= 0;
 		Node temp = new Node();
 		if(node.isLeaf())
@@ -36,7 +50,8 @@ public class BTree implements Serializable {
 		{	
 				for(int i =0;i < node.links.size();i++){
 					if(node.links.get(i).isFull()){
-						node.split(node.links.get(i));
+						nodeCount++;
+						node.split(node.links.get(i), nodeCount,raf);
 						i = 0;
 					}//end if
 				}//end for
@@ -45,7 +60,8 @@ public class BTree implements Serializable {
 			
 			for(int i =0;i < node.links.size();i++){
 				if(node.links.get(i).isFull()){
-					node.split(node.links.get(i));
+					nodeCount++;
+					node.split(node.links.get(i),nodeCount,raf);
 					i = 0;
 				}//end if
 			}//end for
@@ -194,4 +210,9 @@ public class BTree implements Serializable {
 			}
 		}// end for
 	}//end checkList
+	
+	public int getNodeCount(){
+		return nodeCount;
+	}//end nodeCount
+	
 }//end class

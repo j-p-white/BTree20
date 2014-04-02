@@ -1,3 +1,5 @@
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.util.ArrayList;
 //this class needs to the same type as the BTree some how
@@ -9,6 +11,7 @@ public class Node implements Serializable{
 	ArrayList<Node> links = new ArrayList<Node>();
 	long startIndex;
 	long incrementSize =1280;
+	Persistance save = new Persistance();
 	public Node(){
 		
 	}
@@ -31,8 +34,9 @@ public class Node implements Serializable{
 		}
 	}//end isFull
 	
-	public void split(Node link){
+	public void split(Node link, int nodeCount,RandomAccessFile raf) throws IOException{
 		Node right = new Node();
+		right.setStartIndex(nodeCount * incrementSize);
 		String middleVal;
 		int count = 0;
 		//get right
@@ -51,16 +55,22 @@ public class Node implements Serializable{
 		//add keys and links in proper spot
 		keys.add(count,middleVal); 
 		links.add(count+1,right);
+		save.write(raf, right);
 	}//end split
 	
-	public void rootSplit(){
+	public void rootSplit(int nodeCount,RandomAccessFile raf) throws IOException{
 		Node myLeft = makeNewLeft();
+		int olderCount = nodeCount -1;
+		myLeft.setStartIndex(olderCount * incrementSize);
 		Node myRight = makeNewRight();
+		myLeft.setStartIndex(nodeCount * incrementSize);
 		if(!links.isEmpty()){
 			addLeftLinks(myLeft); 
 			addRightLinks(myRight);
 		}
 		hookLinks(myLeft,myRight);
+		save.write(raf, myLeft);
+		save.write(raf, myRight);
 	}//end split root
 	
 	private Node makeNewLeft(){
