@@ -142,7 +142,7 @@ public class Test {
 		tree.insert("pool"); 
 		tree.insert("net");
 		tree.insert("never");
-		
+	
 			System.out.println("root: "+tree.getRoot().getStartIndex());
 			System.out.println("left: "+tree.getRoot().links.get(0).getStartIndex());
 			System.out.println("right: "+tree.getRoot().links.get(1).getStartIndex());
@@ -152,6 +152,7 @@ public class Test {
 			System.out.println(" right 0: "+tree.getRoot().links.get(1).links.get(0).getStartIndex());
 			System.out.println(" right 1: "+tree.getRoot().links.get(1).links.get(1).getStartIndex());
 			System.out.println(" right 2: "+tree.getRoot().links.get(1).links.get(2).getStartIndex());
+		
 	}
 	
 }//end class 

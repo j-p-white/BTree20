@@ -59,11 +59,11 @@ public class Node implements Serializable{
 	}//end split
 	
 	public void rootSplit(int nodeCount,RandomAccessFile raf) throws IOException{
+		int leftCount = nodeCount -1;
 		Node myLeft = makeNewLeft();
-		int olderCount = nodeCount -1;
-		myLeft.setStartIndex(olderCount * incrementSize);
+		myLeft.setStartIndex(leftCount * incrementSize);
 		Node myRight = makeNewRight();
-		myLeft.setStartIndex(nodeCount * incrementSize);
+		myRight.setStartIndex(nodeCount * incrementSize);
 		if(!links.isEmpty()){
 			addLeftLinks(myLeft); 
 			addRightLinks(myRight);
