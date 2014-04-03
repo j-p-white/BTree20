@@ -130,6 +130,8 @@ public class Test {
 	}//end prefex test
 	
 	public static void testPersist() throws IOException{
+		Persistance per = new Persistance();
+		Node myNode = new Node();
 		BTree tree = new BTree();	
 		tree.insert("apple"); 
 		tree.insert("sand");
@@ -152,6 +154,13 @@ public class Test {
 			System.out.println(" right 0: "+tree.getRoot().links.get(1).links.get(0).getStartIndex());
 			System.out.println(" right 1: "+tree.getRoot().links.get(1).links.get(1).getStartIndex());
 			System.out.println(" right 2: "+tree.getRoot().links.get(1).links.get(2).getStartIndex());
+			
+		
+			myNode = per.read(tree.getFile(),0);
+			
+			for(String key:myNode.keys){
+				System.out.println(key);
+			}
 		
 	}
 	

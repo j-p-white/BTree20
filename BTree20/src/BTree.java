@@ -10,17 +10,29 @@ public class BTree implements Serializable {
 	Node root;
 	int nodeCount;
 	RandomAccessFile raf;
-	
+	Persistance per;
+	//need to serilaize root
 	public BTree(){
 		root = new Node();
 		root.setStartIndex(0);
-		nodeCount = 1;
+		nodeCount = 0;
 		try {
 			raf = new RandomAccessFile("Btree.dat","rw");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
+		per = new Persistance();
+		try {
+			per.write(raf, root);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}// end BTree
 	
 	public void insert(String value) throws IOException{
@@ -28,7 +40,7 @@ public class BTree implements Serializable {
 			nodeCount = nodeCount +2;
 			root.rootSplit(nodeCount,raf);
 		}
-			insert(root, value);	
+			insert(root, value);		
 	}//end public add 
 	
 	private void insert(Node node,String val) throws IOException{
@@ -214,5 +226,9 @@ public class BTree implements Serializable {
 	public int getNodeCount(){
 		return nodeCount;
 	}//end nodeCount
+	
+	public RandomAccessFile getFile(){
+		return raf;
+	}
 	
 }//end class

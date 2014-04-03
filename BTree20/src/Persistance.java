@@ -35,6 +35,7 @@ public class Persistance {
 				myTemp.keys.add(s);
 		}// end for
 	  if(myTemp.links.size()!=0){
+		  System.out.println("we have links");
 		 for(int j = 0; j < myTemp.MAXKEYS +1;j++){
 			 long l = raf.readLong();
 			 myTemp.links.get(j).setStartIndex(l);
