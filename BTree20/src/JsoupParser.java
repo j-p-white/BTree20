@@ -29,10 +29,15 @@ public class JsoupParser {
 					fileWords = JsoupParsing(url);
 					String trimmedUrl = urlTrimming(url)[1];
 					for(String words:fileWords){
-						if(words.length() < 33){
+						if(words.length() < 34){
 							paddedWord = hookStrings(words,trimmedUrl) + getPadding(hookStrings(words,trimmedUrl).length());
 						}// end wordsIf	
-						tree.insert(paddedWord);
+						try {
+							tree.insert(paddedWord);
+						} catch (ClassNotFoundException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}//end for
 				}//end scanner while
 			scan.close();			
@@ -51,7 +56,7 @@ public class JsoupParser {
 		int diffrence;
 		String pad =" ";
 		String padding = "";
-		diffrence = 33 - wordLength;
+		diffrence = 34 - wordLength;
 		for(int i =0; i < diffrence;i++){
 			padding = padding + pad;
 		}// end for

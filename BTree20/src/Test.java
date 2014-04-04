@@ -26,7 +26,7 @@ public class Test {
 		System.out.println(pars.getPadding(word.length()));
 	}
 	
-	public static void testAdd() throws IOException{
+	public static void testAdd() throws IOException, ClassNotFoundException{
 		BTree tree = new BTree();	
 		tree.insert("apple"); 
 		tree.insert("sand");
@@ -51,7 +51,7 @@ public class Test {
 		System.out.println("node count: "+tree.getNodeCount());
 
 	}
-	public static void testFindPredecessor() throws IOException{
+	public static void testFindPredecessor() throws IOException, ClassNotFoundException{
 		BTree tree = new BTree();
 		tree.insert("apple"); 
 		tree.insert("sand");
@@ -64,7 +64,7 @@ public class Test {
 		tree.insert("pool"); 
 		System.out.println("get predicessor: "+tree.getRoot().predacessor(0));
 	}	
-	public static void testSave() throws IOException{
+	public static void testSave() throws IOException, ClassNotFoundException{
 		BTree tree = new BTree();	
 		tree.insert("apple"); 
 		tree.insert("sand");
@@ -86,7 +86,7 @@ public class Test {
 			ex.printStackTrace();
 		}
 	}// end save test
-	public static void testDelete() throws IOException{
+	public static void testDelete() throws IOException, ClassNotFoundException{
 		BTree tree = new BTree();
 		tree.insert("apple"); 
 		tree.insert("sand");
@@ -112,7 +112,7 @@ public class Test {
 		System.out.println(" right 2: "+tree.getRoot().links.get(1).links.get(2).keys);
 	}
 	
-	public static void testPrefexFind() throws IOException{
+	public static void testPrefexFind() throws IOException, ClassNotFoundException{
 		BTree tree = new BTree();	
 		tree.insert("apple"); 
 		tree.insert("sand");
@@ -132,21 +132,43 @@ public class Test {
 	public static void testPersist() throws IOException{
 		Persistance per = new Persistance();
 		Node myNode = new Node();
-		BTree tree = new BTree();	
-		tree.insert("apple"); 
+		Node temp;
+		
+		myNode.keys.add("apples");
+		myNode.keys.add("bananas");
+		myNode.keys.add("alromegabetadeltaseimpafiwhooohooo");
+		temp = new Node();
+		temp.keys.add("zing");
+		myNode.links.add(0,temp);
+		
+		temp = new Node();
+		temp.keys.add("zoom");
+		myNode.links.add(1,temp);
+		
+		temp = new Node();
+		temp.keys.add("whzooz");
+		myNode.links.add(2,temp);
+		
+		
+		
+		
+		BTree tree = new BTree();
+		
+		per.write(tree.getFile(), myNode);
+	/*	tree.insert("apple"); 
 		tree.insert("sand");
 		tree.insert("math");
 		tree.insert("tree");
 		tree.insert("north");
-		tree.insert("onion");
+		tree.insert("onion            ");
 		tree.insert("pan");
 		tree.insert("pink");
 		tree.insert("pool"); 
 		tree.insert("net");
 		tree.insert("never");
-	
-			System.out.println("root: "+tree.getRoot().getStartIndex());
-			System.out.println("left: "+tree.getRoot().links.get(0).getStartIndex());
+	*/
+		//	System.out.println("root: "+tree.getRoot().getStartIndex());
+		/*	System.out.println("left: "+tree.getRoot().links.get(0).getStartIndex());
 			System.out.println("right: "+tree.getRoot().links.get(1).getStartIndex());
 			System.out.println(" left 0: "+tree.getRoot().links.get(0).links.get(0).getStartIndex());
 			System.out.println(" left 1: "+tree.getRoot().links.get(0).links.get(1).getStartIndex());
@@ -155,13 +177,22 @@ public class Test {
 			System.out.println(" right 1: "+tree.getRoot().links.get(1).links.get(1).getStartIndex());
 			System.out.println(" right 2: "+tree.getRoot().links.get(1).links.get(2).getStartIndex());
 			
-		
+		*/
+		/*
+			per.write(tree.getFile(), tree.getRoot());
 			myNode = per.read(tree.getFile(),0);
 			
 			for(String key:myNode.keys){
-				System.out.println(key);
+				System.out.println(key.toString());
 			}
-		
+			for(int i =0; i <myNode.links.size();i++){
+				temp = new Node();
+				temp = per.read(tree.getFile(), myNode.links.get(i).getStartIndex());
+				for(String key:temp.keys){
+					System.out.println(key);
+				}
+			}
+		*/
 	}
 	
 }//end class 

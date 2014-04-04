@@ -35,12 +35,13 @@ public class BTree implements Serializable {
 		
 	}// end BTree
 	
-	public void insert(String value) throws IOException{
+	public void insert(String value) throws IOException, ClassNotFoundException{
+		root = per.read(getFile(), 0);
 		if(root.isFull()){
 			nodeCount = nodeCount +2;
 			root.rootSplit(nodeCount,raf);
 		}
-			insert(root, value);		
+			insert(root, value);	
 	}//end public add 
 	
 	private void insert(Node node,String val) throws IOException{
@@ -121,8 +122,8 @@ public class BTree implements Serializable {
 			return node.links.get(count);
 	}//end find value
 
-	// i am trying to find links in the node i deleted instead of the nodes parent
-	public void delete(String value){
+	public void delete(String value) throws ClassNotFoundException, IOException{
+		root = per.read(getFile(), 0);
 	  if(search(value)){
 		  delete(root,value);
 		  if(root.keys.size() == 0){
@@ -137,7 +138,7 @@ public class BTree implements Serializable {
 	private void delete(Node node, String Val){
 		int count = 0;
 		String predecessorVal;
-		if(node.keys.contains(Val)){
+		if(node.keys.contains(Val)){ // need to fix this with find
 			if(node.isLeaf()){
 				node.keys.remove(Val); 
 				return;
