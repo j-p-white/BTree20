@@ -8,7 +8,7 @@ public class Node implements Serializable{
 	final int middle = MAXKEYS/2;
 	ArrayList<String> keys = new ArrayList<String>(); 
 	ArrayList<Long> links = new ArrayList<Long>();
-	long incrementSize =2364;
+	int incrementSize =2364;
 	int startIndex;
 	BTree tree;
 	public Node(){
@@ -35,6 +35,7 @@ public class Node implements Serializable{
 	
 	public void split(Node link, int nodeCount) throws IOException{
 		Node right = new Node();
+		right.setStartIndex(nodeCount * incrementSize);
 		String middleVal;
 		int count = 0;
 		//get right
@@ -52,7 +53,7 @@ public class Node implements Serializable{
 		}
 		//add keys and links in proper spot
 		keys.add(count,middleVal); 
-		links.add(count+1,nodeCount * incrementSize);
+		links.add(count+1,(long) (nodeCount * incrementSize));
 		// i will need to send per the incrament size
 		tree.per.write(right);
 	}//end split
@@ -203,7 +204,7 @@ public class Node implements Serializable{
 		long nodeLocA = links.get(count); 
 		long nodeLocB = links.get(count+1);
 		Node temp = tree.per.read(nodeLocA);
-		Node temp2 = tree.per.read( nodeLocB);
+		Node temp2 = tree.per.read(nodeLocB);
 		//the parent key
 		parentKey = keys.remove(count);
 		//parent key is placed in deficient left node brining it to minimum

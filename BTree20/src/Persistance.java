@@ -12,6 +12,7 @@ public class Persistance implements Serializable {
 	private static final long serialVersionUID = 1L;
 	int incrementSize = 2364;
 	RandomAccessFile raf;
+	int arraySize;
 	
 	public Persistance() throws FileNotFoundException{
 		raf= new RandomAccessFile("Btree.dat","rw");
@@ -21,12 +22,14 @@ public class Persistance implements Serializable {
 		ByteArrayOutputStream b= new ByteArrayOutputStream();
 		ObjectOutput out = new ObjectOutputStream(b);
 		out.writeObject(node);
-		raf.write(b.toByteArray(),node.getStartIndex(),incrementSize);
+		arraySize = b.toByteArray().length;
+		raf.write(b.toByteArray(),node.getStartIndex(),arraySize);
+		raf.close();
 	}// end method
 	
 	public Node read(long startNumber) throws IOException, ClassNotFoundException{
-		byte[] array = new byte[incrementSize];
-		raf.read(array, (int) startNumber, incrementSize);
+		byte[] array = new byte[arraySize];
+		raf.read(array, (int) startNumber, array.length);
 		ByteArrayInputStream b = new ByteArrayInputStream(array);
 		ObjectInputStream in = new ObjectInputStream(b);
 		return (Node) in.readObject();
