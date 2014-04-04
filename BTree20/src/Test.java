@@ -1,7 +1,5 @@
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
+
 public class Test {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
@@ -25,7 +23,6 @@ public class Test {
 	}
 	
 	public static void testAdd() throws IOException, ClassNotFoundException{
-		Persistance per = new Persistance();
 		BTree tree = new BTree();	
 		Node temp1,temp2,temp3,temp4,temp5,temp6,temp7,temp8,root;
 		tree.insert("apple"); 
@@ -40,15 +37,15 @@ public class Test {
 		tree.insert("net");
 		tree.insert("never");
 		
-		root = per.read(0);
-		temp1 = per.read(root.links.get(0));
-		temp2 = per.read(root.links.get(1));
-		temp3 = per.read(temp1.links.get(0));
-		temp4 = per.read(temp1.links.get(1));
-		temp5 = per.read(temp1.links.get(2));
-		temp6 = per.read(temp2.links.get(0));
-		temp7 = per.read(temp2.links.get(1));
-		temp8 = per.read(temp2.links.get(2));
+		root = tree.per.read(0);
+		temp1 = tree.per.read(root.links.get(0));
+		temp2 = tree.per.read(root.links.get(1));
+		temp3 = tree.per.read(temp1.links.get(0));
+		temp4 = tree.per.read(temp1.links.get(1));
+		temp5 = tree.per.read(temp1.links.get(2));
+		temp6 = tree.per.read(temp2.links.get(0));
+		temp7 = tree.per.read(temp2.links.get(1));
+		temp8 = tree.per.read(temp2.links.get(2));
 		
 	/*
 		System.out.println("root: "+root.keys);
@@ -102,7 +99,7 @@ public class Test {
 		tree.insert("net");
 		tree.insert("never");
 		tree.delete("apple");
-		
+	/*	
 		System.out.println("root: "+tree.getRoot().keys);
 		System.out.println("left: "+tree.getRoot().links.get(0).keys);
 		System.out.println("right: "+tree.getRoot().links.get(1).keys);
@@ -112,6 +109,7 @@ public class Test {
 		System.out.println(" right 0: "+tree.getRoot().links.get(1).links.get(0).keys);
 		System.out.println(" right 1: "+tree.getRoot().links.get(1).links.get(1).keys);
 		System.out.println(" right 2: "+tree.getRoot().links.get(1).links.get(2).keys);
+	*/
 	}
 	
 	public static void testPrefexFind() throws IOException, ClassNotFoundException{

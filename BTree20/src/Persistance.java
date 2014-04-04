@@ -8,16 +8,14 @@ import java.io.ObjectOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
-
 public class Persistance implements Serializable {
 	private static final long serialVersionUID = 1L;
-	int incrementSize;
-	BTree tree;
+	int incrementSize = 2364;
 	RandomAccessFile raf;
+	
 	public Persistance() throws FileNotFoundException{
-		raf = new RandomAccessFile("Btree.dat","rw");
-		 incrementSize = 2364;
-	}// end empty constrctor
+		raf= new RandomAccessFile("Btree.dat","rw");
+	}// end empty constructor
 	
 	public void write(Node node) throws IOException{
 		ByteArrayOutputStream b= new ByteArrayOutputStream();
@@ -27,10 +25,10 @@ public class Persistance implements Serializable {
 	}// end method
 	
 	public Node read(long startNumber) throws IOException, ClassNotFoundException{
-		byte[] array = new byte[69820];
+		byte[] array = new byte[incrementSize];
 		raf.read(array, (int) startNumber, incrementSize);
 		ByteArrayInputStream b = new ByteArrayInputStream(array);
 		ObjectInputStream in = new ObjectInputStream(b);
 		return (Node) in.readObject();
 	}// end method	
-}// end persistance
+}// end persistence

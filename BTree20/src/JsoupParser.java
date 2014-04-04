@@ -14,7 +14,7 @@ import org.jsoup.nodes.Document;
  * Copyright notice: none
  */
 public class JsoupParser {
-	BTree tree = new BTree();
+	BTree tree;
 	public void readInFile(){ 
 		Scanner scan;
 		String url;

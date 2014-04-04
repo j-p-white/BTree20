@@ -1,5 +1,5 @@
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -8,21 +8,21 @@ public class BTree implements Serializable {
 	private static final long serialVersionUID = 1L;
 	Node root;
 	int nodeCount;
-	RandomAccessFile raf;
 	Persistance per;
-	public BTree(){
+	public BTree() throws FileNotFoundException{
 		root = new Node();
 		root.setStartIndex(0);
 		nodeCount = 0;
+		per = new Persistance();
 	}// end BTree
 	
 	public void insert(String value) throws IOException, ClassNotFoundException{
-		if(raf.length() != 0){
+		if(per.raf.length() != 0){
 			root = per.read(0);
 		}
 		if(root.isFull()){
 			nodeCount = nodeCount +2;
-			root.rootSplit(nodeCount,raf);
+			root.rootSplit(nodeCount);
 		}
 			insert(root, value);	
 		per.write(root);
@@ -53,7 +53,7 @@ public class BTree implements Serializable {
 					looking = per.read(nodeLocA);
 					if(looking.isFull()){
 						nodeCount++;
-						node.split(looking, nodeCount,raf);
+						node.split(looking, nodeCount);
 						i = 0;
 					}//end if
 				}//end for
@@ -65,7 +65,7 @@ public class BTree implements Serializable {
 				looking = per.read(nodeLocA);
 				if(looking.isFull()){
 					nodeCount++;
-					node.split(looking, nodeCount,raf);
+					node.split(looking, nodeCount);
 					i = 0;
 				}//end if
 			}//end for
@@ -231,9 +231,5 @@ public class BTree implements Serializable {
 	public int getNodeCount(){
 		return nodeCount;
 	}//end nodeCount
-	
-	public RandomAccessFile getFile(){
-		return raf;
-	}
 	
 }//end class
