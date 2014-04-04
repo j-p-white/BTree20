@@ -24,7 +24,6 @@ public class Persistance implements Serializable {
 		out.writeObject(node);
 		arraySize = b.toByteArray().length;
 		raf.write(b.toByteArray(),node.getStartIndex(),arraySize);
-		raf.close();
 	}// end method
 	
 	public Node read(long startNumber) throws IOException, ClassNotFoundException{
