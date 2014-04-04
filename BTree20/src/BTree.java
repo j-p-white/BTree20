@@ -1,4 +1,3 @@
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.Serializable;
@@ -11,42 +10,28 @@ public class BTree implements Serializable {
 	int nodeCount;
 	RandomAccessFile raf;
 	Persistance per;
-	//need to serilaize root
 	public BTree(){
 		root = new Node();
 		root.setStartIndex(0);
 		nodeCount = 0;
-		try {
-			raf = new RandomAccessFile("Btree.dat","rw");
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-		per = new Persistance();
-		try {
-			per.write(raf, root);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
 	}// end BTree
 	
 	public void insert(String value) throws IOException, ClassNotFoundException{
-		root = per.read(getFile(), 0);
+		if(raf.length() != 0){
+			root = per.read(0);
+		}
 		if(root.isFull()){
 			nodeCount = nodeCount +2;
 			root.rootSplit(nodeCount,raf);
 		}
 			insert(root, value);	
+		per.write(root);
 	}//end public add 
 	
-	private void insert(Node node,String val) throws IOException{
+	private void insert(Node node,String val) throws IOException, ClassNotFoundException{
 		int count= 0;
 		Node temp = new Node();
+		Node looking = new Node();
 		if(node.isLeaf())
 		{
 			for(String letter: node.keys){
@@ -58,13 +43,17 @@ public class BTree implements Serializable {
 				}
 			}//end for
 			node.keys.add(count,val);
+			//write the node 
+			per.write(node);
 		}// end leaf case
 		else
 		{	
 				for(int i =0;i < node.links.size();i++){
-					if(node.links.get(i).isFull()){
+					long nodeLocA = node.links.get(i);
+					looking = per.read(nodeLocA);
+					if(looking.isFull()){
 						nodeCount++;
-						node.split(node.links.get(i), nodeCount,raf);
+						node.split(looking, nodeCount,raf);
 						i = 0;
 					}//end if
 				}//end for
@@ -72,16 +61,18 @@ public class BTree implements Serializable {
 			insert(temp,val);
 			
 			for(int i =0;i < node.links.size();i++){
-				if(node.links.get(i).isFull()){
+				long nodeLocA = node.links.get(i);
+				looking = per.read(nodeLocA);
+				if(looking.isFull()){
 					nodeCount++;
-					node.split(node.links.get(i),nodeCount,raf);
+					node.split(looking, nodeCount,raf);
 					i = 0;
 				}//end if
 			}//end for
 		}// end else
 	}//end private insert
 	
-	public boolean search(String val){
+	public boolean search(String val) throws ClassNotFoundException, IOException{
 		boolean result = true;
 		if(root.keys.contains(val)){
 			result = true;
@@ -92,7 +83,7 @@ public class BTree implements Serializable {
 		return result;
 	}//end method
 	
-	private boolean search(Node node, String value){
+	private boolean search(Node node, String value) throws ClassNotFoundException, IOException{
 		boolean found = true;
 		if(node.isLeaf()){
 			found = false;
@@ -109,8 +100,9 @@ public class BTree implements Serializable {
 		}//end link else 
 		return found;
 	}
-	public Node findLink(Node node, String value){
+	public Node findLink(Node node, String value) throws ClassNotFoundException, IOException{
 		int count = 0;
+		Node temp = new Node();
 		for(String w: node.keys){
 			if(value.compareTo(w)>0){
 				count++;
@@ -119,11 +111,13 @@ public class BTree implements Serializable {
 				break;
 			}//end else
 		}// end for
-			return node.links.get(count);
+		long nodeLocA = node.links.get(count);
+			temp = per.read(nodeLocA);
+			return temp;
 	}//end find value
 
 	public void delete(String value) throws ClassNotFoundException, IOException{
-		root = per.read(getFile(), 0);
+		root = per.read(0);
 	  if(search(value)){
 		  delete(root,value);
 		  if(root.keys.size() == 0){
@@ -135,12 +129,14 @@ public class BTree implements Serializable {
 		  System.out.println("this value is not real");
 	  }	
 	}
-	private void delete(Node node, String Val){
+	private void delete(Node node, String Val) throws ClassNotFoundException, IOException{
 		int count = 0;
+		Node temp = new Node();
 		String predecessorVal;
 		if(node.keys.contains(Val)){ // need to fix this with find
 			if(node.isLeaf()){
 				node.keys.remove(Val); 
+				per.write(node);
 				return;
 			}
 			else{
@@ -158,9 +154,10 @@ public class BTree implements Serializable {
 		}
 		else{
 			delete(findLink(node,Val),Val);
-		//	for(Node n:node.links){
 			for(int i =0; i < node.links.size();i++){
-				if(node.links.get(i).minSize()){
+				long nodeLocA = node.links.get(i);
+				temp = per.read(nodeLocA);
+				if(temp.minSize()){
 					node.repair(i);
 					i = 0;
 				}// end if
@@ -173,29 +170,36 @@ public class BTree implements Serializable {
 		return root;
 	}
 	
-	public void newRoot(){
+	public void newRoot() throws ClassNotFoundException, IOException{
 		Node temp ;
-		temp = root.links.get(0);
+		long nodeLocA = root.links.get(0);
+		temp = per.read(nodeLocA);
 		root.links.clear();
 		root = temp;
 	}
 	
-	public ArrayList<String> findPrefix(String Pre){
+	public ArrayList<String> findPrefix(String Pre) throws ClassNotFoundException, IOException{
 		return findPrefix(root,Pre);
 	}
 	
-	private ArrayList<String> findPrefix(Node node, String Pre){
+	private ArrayList<String> findPrefix(Node node, String Pre) throws ClassNotFoundException, IOException{
 		ArrayList<String> valueList = new ArrayList<String>();
+		Node temp = new Node();
+		Node temp2 = new Node();
 		for(int i = 0; i < node.keys.size();i++){
 			if(node.keys.get(i).startsWith(Pre)||node.keys.get(i).compareTo(Pre)>0){
+				long nodeLocA = node.links.get(i);
+				long nodeLocB = node.links.get(i+1);
+				temp = per.read(nodeLocA);
+				temp2 = per.read(nodeLocB);
 				if(!node.isLeaf()){
-					checkLists(valueList,findPrefix(node.links.get(i),Pre));
+					checkLists(valueList,findPrefix(temp,Pre));
 					//if(node.links.get(i +1)!= null){
 					// valueList.addAll(findPrefix(node.links.get(i+1),Pre));
 					//}
 				}
 				if(!node.isLeaf() && node.links.get(i +1)!= null){
-					checkLists(valueList,findPrefix(node.links.get(i+1),Pre));
+					checkLists(valueList,findPrefix(temp2,Pre));
 				}
 				if(node.keys.get(i).startsWith(Pre)){
 					if(!valueList.contains(node.keys.get(i))){
@@ -206,7 +210,7 @@ public class BTree implements Serializable {
 			}// end big if 
 			else if(i == node.keys.size()-1){
 				if(!node.isLeaf() && node.links.get(i+1)!=null){ // Potently issue
-					valueList.addAll(findPrefix(node.links.get(i+1),Pre));
+					valueList.addAll(findPrefix(temp2,Pre));
 				}//end one last check if 
 			}// end end-of-rope else
 		}// end for
