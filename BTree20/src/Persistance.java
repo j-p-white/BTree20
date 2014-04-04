@@ -19,6 +19,8 @@ public class Persistance implements Serializable {
 	}// end empty constructor
 	
 	public void write(Node node) throws IOException{
+		//this method needs to fill the node properly to the proper size 
+		// then write the propersize and 
 		ByteArrayOutputStream b= new ByteArrayOutputStream();
 		ObjectOutput out = new ObjectOutputStream(b);
 		out.writeObject(node);
@@ -28,8 +30,9 @@ public class Persistance implements Serializable {
 	}// end method
 	
 	public Node read(long startNumber) throws IOException, ClassNotFoundException{
-		byte[] array = new byte[arraySize];
-		raf.read(array, (int) startNumber, array.length);
+		byte[] array = new byte[incrementSize];
+		System.out.println("raf file length"+raf.length());
+		raf.read(array,(int) startNumber, arraySize);
 		ByteArrayInputStream b = new ByteArrayInputStream(array);
 		ObjectInputStream in = new ObjectInputStream(b);
 		return (Node) in.readObject();
