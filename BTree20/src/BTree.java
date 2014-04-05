@@ -27,7 +27,6 @@ public class BTree implements Serializable {
 			root.rootSplit(nodeCount);
 		}
 			insert(root, value);	
-			inital = per.raf.length();
 			//per.write(root);
 		
 	}//end public add 
@@ -235,5 +234,4 @@ public class BTree implements Serializable {
 	public int getNodeCount(){
 		return nodeCount;
 	}//end nodeCount
-	
 }//end class

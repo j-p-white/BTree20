@@ -20,6 +20,7 @@ public class Persistance implements Serializable {
 	
 	public void write(Node node) throws IOException{
 		//this method needs to fill the node properly to the proper size 
+		raf.seek(node.startIndex);
 		// then write the propersize and 
 		if(node.keys.size() < node.MAXKEYS){
 			fillNode(node);
@@ -29,15 +30,15 @@ public class Persistance implements Serializable {
 		out.writeObject(node);
 		arraySize = b.toByteArray().length; // print out arraySize
 		System.out.println("nodeSize"+ arraySize);
-		raf.write(b.toByteArray(),node.getStartIndex(),arraySize);
-		raf.close();
+		raf.write(b.toByteArray());
 	}// end method
 	
 	public Node read(long startNumber) throws IOException, ClassNotFoundException{
+		System.out.println("startNumber: "+startNumber);
+		raf.seek(startNumber);
 		Node temp;
-		byte[] array = new byte[incrementSize];
-		System.out.println("raf file length"+raf.length());
-		raf.read(array,(int) startNumber, arraySize);
+		byte[] array = new byte[arraySize];
+		raf.read(array);
 		ByteArrayInputStream b = new ByteArrayInputStream(array);
 		ObjectInputStream in = new ObjectInputStream(b);
 		temp = (Node) in.readObject(); 
@@ -73,7 +74,12 @@ public class Persistance implements Serializable {
 				node.links.remove(j);
 				j =0;
 			}
+			if(node.links.get(0) == badLong){
+				node.links.remove(0);
+				j =0;
+			}
 		}// end for
+
 	}//end fixNode
 	
 }// end persistence

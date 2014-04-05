@@ -9,7 +9,7 @@ public class Node implements Serializable{
 	ArrayList<String> keys = new ArrayList<String>(); 
 	ArrayList<Long> links = new ArrayList<Long>();
 	int incrementSize =394;//2364 - for 31 keys 32 links/ 394 - for 3 keys 4 links
-	int startIndex;
+	long startIndex;
 	BTree tree;
 	public Node(){
 		
@@ -272,10 +272,10 @@ public class Node implements Serializable{
 		}
 		return result;
 	}// end minSize
-	public void setStartIndex(int startIndex){
+	public void setStartIndex(long startIndex){
 		this.startIndex = startIndex;
 	}
-	public int getStartIndex(){
+	public long getStartIndex(){
 		return startIndex;
 	}
 	
