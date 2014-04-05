@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Test {
 
@@ -24,19 +25,27 @@ public class Test {
 	
 	public static void testAdd() throws IOException, ClassNotFoundException{
 		BTree tree = new BTree();	
-		Node temp1,temp2,temp3,temp4,temp5,temp6,temp7,temp8,root;
-		tree.insert("apple"); 
-		tree.insert("sand");
-		tree.insert("math");
-		tree.insert("tree");
-		tree.insert("north");
-		tree.insert("onion");
-		tree.insert("pan");
-		tree.insert("pink");
-		tree.insert("pool"); 
-		tree.insert("net");
-		tree.insert("never");
+		String padding,fixedString;
+		ArrayList<String> testWords = new ArrayList<String>();
+		testWords.add("apple");
+		testWords.add("sand");
+		testWords.add("math");
+		testWords.add("tree");
+		testWords.add("north");
+		testWords.add("onion");
+		testWords.add("pan");
+		testWords.add("pink");
+		testWords.add("pool");
+		testWords.add("net");
+		testWords.add("never");
 		
+		for(String k : testWords){
+			padding = getPadding(k.length());
+			fixedString = k + padding;
+			tree.insert(fixedString);
+		}
+		
+		Node temp1,temp2,temp3,temp4,temp5,temp6,temp7,temp8,root;
 		root = tree.per.read(0);
 		temp1 = tree.per.read(root.links.get(0));
 		temp2 = tree.per.read(root.links.get(1));
@@ -128,4 +137,16 @@ public class Test {
 		
 		System.out.println(tree.findPrefix("s"));
 	}//end prefex test
+	private static String getPadding(int wordLength){
+		int diffrence;
+		String pad =" ";
+		String padding = "";
+		diffrence = 34 - wordLength;
+		for(int i =0; i < diffrence;i++){
+			padding = padding + pad;
+		}// end for
+		return padding;
+	}
+	
+	
 }//end class 

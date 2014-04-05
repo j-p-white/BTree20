@@ -17,7 +17,8 @@ public class BTree implements Serializable {
 	}// end BTree
 	
 	public void insert(String value) throws IOException, ClassNotFoundException{
-		if(per.raf.length() != 0){
+		long inital = per.raf.length();
+		if(inital != 0){
 			root = per.read(0);
 		}
 		if(root.isFull()){
@@ -25,7 +26,9 @@ public class BTree implements Serializable {
 			root.rootSplit(nodeCount);
 		}
 			insert(root, value);	
-		per.write(root);
+		if(per.raf.length() != inital){
+			per.write(root);
+		}
 	}//end public add 
 	
 	private void insert(Node node,String val) throws IOException, ClassNotFoundException{
