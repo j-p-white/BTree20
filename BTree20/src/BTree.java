@@ -27,9 +27,9 @@ public class BTree implements Serializable {
 			root.rootSplit(nodeCount);
 		}
 			insert(root, value);	
-		if(per.raf.length() != inital){
-			per.write(root);
-		}
+			inital = per.raf.length();
+			//per.write(root);
+		
 	}//end public add 
 	
 	private void insert(Node node,String val) throws IOException, ClassNotFoundException{
