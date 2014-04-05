@@ -58,6 +58,7 @@ public class Node implements Serializable{
 		tree.per.write(right);
 	}//end split
 	
+	//look over how i write to splits
 	public void rootSplit(int nodeCount) throws IOException{
 		int leftCount = nodeCount -1;
 		long offLeft = (leftCount * incrementSize);

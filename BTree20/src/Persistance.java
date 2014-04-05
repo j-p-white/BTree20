@@ -58,6 +58,7 @@ public class Persistance implements Serializable {
 		}
 	}//end fillNode
 	
+	// this method may be broken 
 	private void fixNode(Node node){
 		String star = "**********************************"; 
 		long badLong = -1;
