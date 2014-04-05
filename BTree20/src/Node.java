@@ -8,7 +8,7 @@ public class Node implements Serializable{
 	final int middle = MAXKEYS/2;
 	ArrayList<String> keys = new ArrayList<String>(); 
 	ArrayList<Long> links = new ArrayList<Long>();
-	int incrementSize =2364;
+	int incrementSize =394;//2364 - for 31 keys 32 links/ 394 - for 3 keys 4 links
 	int startIndex;
 	BTree tree;
 	public Node(){

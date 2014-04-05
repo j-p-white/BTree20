@@ -27,7 +27,8 @@ public class Persistance implements Serializable {
 		ByteArrayOutputStream b= new ByteArrayOutputStream();
 		ObjectOutput out = new ObjectOutputStream(b);
 		out.writeObject(node);
-		arraySize = b.toByteArray().length;
+		arraySize = b.toByteArray().length; // print out arraySize
+		System.out.println("nodeSize"+ arraySize);
 		raf.write(b.toByteArray(),node.getStartIndex(),arraySize);
 		raf.close();
 	}// end method

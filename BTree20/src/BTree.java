@@ -18,6 +18,7 @@ public class BTree implements Serializable {
 	
 	public void insert(String value) throws IOException, ClassNotFoundException{
 		long inital = per.raf.length();
+		
 		if(inital != 0){
 			root = per.read(0);
 		}
