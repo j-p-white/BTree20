@@ -4,15 +4,16 @@ import java.util.ArrayList;
 // this needs to use the trees persist instead of its own. 
 public class Node implements Serializable{
 	private static final long serialVersionUID = 1L;
+	ArrayList<Node> temp = new ArrayList<Node>();
 	final int MAXKEYS = 3; //31
 	final int middle = MAXKEYS/2;
 	ArrayList<String> keys = new ArrayList<String>(); 
 	ArrayList<Long> links = new ArrayList<Long>();
-	int incrementSize =394;//2364 - for 31 keys 32 links/ 394 - for 3 keys 4 links
+	int incrementSize =2052;
 	long startIndex;
 	BTree tree;
 	public Node(){
-		
+
 	}
 	public boolean isLeaf(){
 		if(links.size() == 0)
@@ -72,8 +73,10 @@ public class Node implements Serializable{
 		hookLinks(offLeft,offRight);
 		
 		//send in the new incrament size
-		tree.per.write( myLeft);
-		tree.per.write( myRight);
+		temp.add(myLeft);
+		temp.add(myRight);
+		//tree.per.write(myLeft);
+		//tree.per.write(myRight);
 	}//end split root
 	
 	private Node makeNewLeft(){
@@ -279,5 +282,7 @@ public class Node implements Serializable{
 	public long getStartIndex(){
 		return startIndex;
 	}
-	
+	public ArrayList<Node> getNode(){
+		return temp;
+	}
 }//end node

@@ -1,4 +1,3 @@
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,7 +8,7 @@ public class BTree implements Serializable {
 	Node root;
 	int nodeCount;
 	Persistance per;
-	public BTree() throws FileNotFoundException{
+	public BTree() throws IOException{
 		root = new Node();
 		root.setStartIndex(0);
 		nodeCount = 0;
@@ -25,6 +24,11 @@ public class BTree implements Serializable {
 		if(root.isFull()){
 			nodeCount = nodeCount +2;
 			root.rootSplit(nodeCount);
+			for(Node n:root.getNode()){
+				per.write(n);
+			}
+			per.write(root);
+			root = per.read(0);
 		}
 			insert(root, value);	
 			//per.write(root);

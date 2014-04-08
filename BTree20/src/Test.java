@@ -1,4 +1,9 @@
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
 public class Test {
@@ -9,6 +14,9 @@ public class Test {
 		//testFindPredecessor();
 		//testDelete();
 		//testPrefexFind();
+		//testSave();
+		//testSave2();
+		
 	}
 	
 	public static void JsoupTestStringManipulating(){
@@ -148,5 +156,78 @@ public class Test {
 		return padding;
 	}
 	
+	public static void testSave() throws IOException,ClassNotFoundException{
+		Node node = new Node(); 
+		node.keys.add("apple");
+		node.keys.add("math"); 
+		node.keys.add("sand");
+		
+		ByteArrayOutputStream b2 = new ByteArrayOutputStream();
+		ObjectOutputStream OOS = new ObjectOutputStream(b2);
+		OOS.writeObject(node);
+		byte[] array = b2.toByteArray();
+		ByteArrayInputStream in2 = new ByteArrayInputStream(array); 
+		ObjectInputStream OIS = new ObjectInputStream(in2);
+		Node temp = (Node) OIS.readObject();
+		OIS.close();
+		
+		for(String s : temp.keys){
+			System.out.println(s);
+		}
+	}
 	
+	public static void testSave2() throws IOException,ClassNotFoundException{
+		ArrayList<Node>nodeList = new ArrayList<Node>();
+		RandomAccessFile raf = new RandomAccessFile("Test.dat","rw");
+		byte[] recivingAry;
+		Node node = new Node(); 
+		Node node2 = new Node();
+		node.setStartIndex(0);
+		node2.setStartIndex(560);
+		node.keys.add("apple");
+		node.keys.add("math"); 
+		node.keys.add("sand");
+		node2.keys.add("candle");
+		node2.keys.add("final"); 
+		node2.keys.add("better");
+		node.links.add((long) 560);
+		nodeList.add(node);
+		nodeList.add(node2);
+		
+		
+		ByteArrayOutputStream b2 = new ByteArrayOutputStream();
+		ObjectOutputStream OOS = new ObjectOutputStream(b2);
+		for(Node n : nodeList){
+			OOS.writeObject(n);
+			byte[] array = b2.toByteArray();
+			raf.write(array);
+		}
+	//	byte[] array = b2.toByteArray();
+	//	raf.write(array);
+		recivingAry = new byte[560];
+		raf.seek(0);
+		raf.read(recivingAry);
+		ByteArrayInputStream in2 = new ByteArrayInputStream(recivingAry); 
+		ObjectInputStream OIS = new ObjectInputStream(in2);
+		Node temp = (Node) OIS.readObject();
+		if(temp.links.size()!= 0){
+			recivingAry = new byte[560];
+			//System.out.raf.length();
+			raf.seek(temp.links.get(0));
+			raf.read(recivingAry);
+			ByteArrayInputStream in1 = new ByteArrayInputStream(recivingAry); 
+			ObjectInputStream OIS1 = new ObjectInputStream(in2);
+			Node temp1 = (Node) OIS.readObject();	
+			
+			for(String s1:temp1.keys){
+				System.out.println(s1);
+				
+			}
+		}
+		OIS.close();
+		
+		for(String s : temp.keys){
+			System.out.println(s);
+		}
+	}
 }//end class 
