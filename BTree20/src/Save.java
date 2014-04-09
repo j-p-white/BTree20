@@ -13,12 +13,12 @@ public class Save {
 		 
 	}
 	
-	public void saveNode(Node n) throws IOException{
-		saveFile.write(packNode(n), n.getStartIndex()); 
+	public void write(Node n) throws IOException{
+		saveFile.write(packNode(n), (int)n.getStartIndex()); 
 	}
 	
 	
-	public Node getNode(long blockNumber) throws IOException{
+	public Node read(long blockNumber) throws IOException{
 		getBytes = saveFile.read((int) blockNumber);
 		return unpackNode(getBytes);
 	}

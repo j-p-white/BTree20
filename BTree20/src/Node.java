@@ -9,7 +9,7 @@ public class Node implements Serializable{
 	final int middle = MAXKEYS/2;
 	ArrayList<String> keys = new ArrayList<String>(); 
 	ArrayList<Long> links = new ArrayList<Long>();
-	int blockNumber;
+	long blockNumber;
 	BTree tree;
 	public Node(){
 
@@ -35,7 +35,7 @@ public class Node implements Serializable{
 	
 	public void split(Node link, int nodeCount) throws IOException{
 		Node right = new Node();
-		right.setStartIndex(nodeCount * incrementSize);
+		right.blockNumber = nodeCount;
 		String middleVal;
 		int count = 0;
 		//get right
@@ -53,9 +53,9 @@ public class Node implements Serializable{
 		}
 		//add keys and links in proper spot
 		keys.add(count,middleVal); 
-		links.add(count+1,(long) (nodeCount * incrementSize));
+		links.add(count+1,(long)nodeCount);
 		// i will need to send per the incrament size
-		tree.per.write(right);
+		tree.save.write(right);
 	}//end split
 	
 	//look over how i write to splits
@@ -65,6 +65,8 @@ public class Node implements Serializable{
 		Node myRight = makeNewRight();
 		myLeft.setBlocknumber(leftCount);
 		myRight.setBlocknumber(nodeCount);
+		long offLeft = myLeft.blockNumber;
+		long offRight = myRight.blockNumber;
 		if(!links.isEmpty()){
 			addLeftLinks(myLeft); 
 			addRightLinks(myRight);
@@ -118,15 +120,15 @@ public class Node implements Serializable{
 	public void internalRepair(int count) throws ClassNotFoundException, IOException{
 		Node temp,temp2;
 		 long nodeLocA = links.get(count);
-		temp =  tree.per.read(nodeLocA);
+		temp =  tree.save.read(nodeLocA);
 		goRightRepair(temp,count+1);
 		for(int i = 0; i < links.size();i++){
 			long nodeLocB = links.get(i);
-			temp2 = tree.per.read(nodeLocB);
+			temp2 = tree.save.read(nodeLocB);
 			if(temp2.minSize()){
 				repair(i);
 				i = 0;
-				tree.per.write(temp2);
+				tree.save.write(temp2);
 			}
 		}
 	}// end internalRepair
@@ -137,15 +139,15 @@ public class Node implements Serializable{
 			return;
 		}//end if
 		else{
-			goRightRepair(tree.per.read(myNode.links.get(count)),count);
+			goRightRepair(tree.save.read(myNode.links.get(count)),count);
 			Node temp;
 			for(int i = 0; i < links.size();i++){
 				long nodeLocA = links.get(i);
-				temp = tree.per.read(nodeLocA);
+				temp = tree.save.read(nodeLocA);
 				if(temp.minSize()){
 					repair(i);
 					i = 0;
-					tree.per.write(temp);
+					tree.save.write(temp);
 					
 				}
 			}
@@ -158,15 +160,15 @@ public class Node implements Serializable{
 		Node temp2 = new Node();
 		long nodeLocA = links.get(count -1);
 		long nodeLocB = links.get(count +1);
-		temp = tree.per.read(nodeLocA);
-		temp2 = tree.per.read(nodeLocB);
+		temp = tree.save.read(nodeLocA);
+		temp2 = tree.save.read(nodeLocB);
 		if(count != 0 && temp.keys.size() > middle ){
 			rotateLeft(count);
-			tree.per.write(temp);
+			tree.save.write(temp);
 		}
 		else if(temp2.keys.size() > middle){
 			rotateRight(count);
-			tree.per.write(temp2);
+			tree.save.write(temp2);
 		}
 		else{
 			merge(count);
@@ -180,11 +182,11 @@ public class Node implements Serializable{
 		Node temp2;
 		long nodeLocA = links.get(count -1);
 		long nodeLocB = links.get(count);
-		int apple =tree.per.read(nodeLocA).keys.size()-1;
+		int apple =tree.save.read(nodeLocA).keys.size()-1;
 		
 		//get the link to the deficient right node
-		temp2 = tree.per.read(nodeLocA);
-		temp = tree.per.read(nodeLocB);
+		temp2 = tree.save.read(nodeLocA);
+		temp = tree.save.read(nodeLocB);
 		
 		// the parent key
 		parentKey = keys.remove(count -1 );
@@ -197,8 +199,8 @@ public class Node implements Serializable{
 		keys.add(count -1,replaceKey);
 		
 		//write node back to file
-		tree.per.write(temp);
-		tree.per.write(temp2);
+		tree.save.write(temp);
+		tree.save.write(temp2);
 	}
 	
 	private void rotateRight(int count) throws ClassNotFoundException, IOException{
@@ -206,8 +208,8 @@ public class Node implements Serializable{
 		String replaceKey;
 		long nodeLocA = links.get(count); 
 		long nodeLocB = links.get(count+1);
-		Node temp = tree.per.read(nodeLocA);
-		Node temp2 = tree.per.read(nodeLocB);
+		Node temp = tree.save.read(nodeLocA);
+		Node temp2 = tree.save.read(nodeLocB);
 		//the parent key
 		parentKey = keys.remove(count);
 		//parent key is placed in deficient left node brining it to minimum
@@ -218,8 +220,8 @@ public class Node implements Serializable{
 		keys.add(count,replaceKey);
 		
 		//write node back to file
-		tree.per.write(temp);
-		tree.per.write(temp2);
+		tree.save.write(temp);
+		tree.save.write(temp2);
 	}
 	
 	private void merge(int count) throws ClassNotFoundException, IOException{
@@ -228,8 +230,8 @@ public class Node implements Serializable{
 		long nodeLocA = links.get(count+1);
 		long nodeLocB = links.get(count);
 		
-		temp = tree.per.read(nodeLocA);
-		temp2 = tree.per.read(nodeLocB);
+		temp = tree.save.read(nodeLocA);
+		temp2 = tree.save.read(nodeLocB);
 		//get the parentKey
 		parentKey = keys.remove(count);
 		
@@ -246,12 +248,12 @@ public class Node implements Serializable{
 		
 		links.remove(count);
 		
-		tree.per.write(temp);
+		tree.save.write(temp);
 	}// end merge
 	
 	public String predacessor(int count) throws ClassNotFoundException, IOException{
 		long nodeLocA = links.get(count);
-		Node temp = tree.per.read(nodeLocA);
+		Node temp = tree.save.read(nodeLocA);
 		return goRight(temp,count+1);
 	}
 	
@@ -261,7 +263,7 @@ public class Node implements Serializable{
 		toReturn = myNode.keys.remove(myNode.keys.size()-1);
 		}//end if
 		else{
-			toReturn = goRight(tree.per.read(myNode.links.get(count)),count);
+			toReturn = goRight(tree.save.read(myNode.links.get(count)),count);
 		}
 		return toReturn;
 	}
@@ -275,10 +277,10 @@ public class Node implements Serializable{
 		}
 		return result;
 	}// end minSize
-	public void setBlocknumber(int blockNumber){
+	public void setBlocknumber(long blockNumber){
 		this.blockNumber = blockNumber;
 	}
-	public int getStartIndex(){
+	public long getStartIndex(){
 		return blockNumber;
 	}
 	public ArrayList<Node> getNode(){
