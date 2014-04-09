@@ -53,9 +53,11 @@ public class Node implements Serializable{
 		}
 		//add keys and links in proper spot
 		keys.add(count,middleVal); 
-		links.add(count+1,(long)nodeCount);
-		// i will need to send per the incrament size
-		tree.save.write(right);
+		links.add(count+1,right.blockNumber);
+		
+		temp.clear();
+		temp.add(link);
+		temp.add(right);
 	}//end split
 	
 	//look over how i write to splits
@@ -73,11 +75,10 @@ public class Node implements Serializable{
 		}
 		hookLinks(offLeft,offRight);
 		
+		temp.clear();
 		//send in the new incrament size
 		temp.add(myLeft);
 		temp.add(myRight);
-		//tree.per.write(myLeft);
-		//tree.per.write(myRight);
 	}//end split root
 	
 	private Node makeNewLeft(){

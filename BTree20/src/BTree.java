@@ -29,7 +29,7 @@ public class BTree implements Serializable {
 			root = save.read(0);
 		}
 			insert(root, value);	
-			//per.write(root);
+			save.write(root);
 		
 	}//end public add 
 	
@@ -59,6 +59,9 @@ public class BTree implements Serializable {
 					if(looking.isFull()){
 						nodeCount++;
 						node.split(looking, nodeCount);
+						for(Node n: node.getNode()){
+							save.write(n);
+						}
 						i = 0;
 					}//end if
 				}//end for
@@ -71,6 +74,9 @@ public class BTree implements Serializable {
 				if(looking.isFull()){
 					nodeCount++;
 					node.split(looking, nodeCount);
+					for(Node n: node.getNode()){
+						save.write(n);
+					}
 					i = 0;
 				}//end if
 			}//end for

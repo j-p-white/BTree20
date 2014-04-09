@@ -6,12 +6,12 @@ public class Test {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		//JsoupTestStringManipulating();
-		//testAdd();
+		testAdd();
 		//testFindPredecessor();
 		//testDelete();
 		//testPrefexFind();
-		testSave3();	
-		testLongSave();
+		//testSave3();	
+		//testLongSave();
 	}
 	
 	public static void JsoupTestStringManipulating(){
@@ -29,6 +29,7 @@ public class Test {
 	public static void testAdd() throws IOException, ClassNotFoundException{
 		BTree tree = new BTree();	
 		String padding,fixedString;
+		Node temp = new Node();
 		ArrayList<String> testWords = new ArrayList<String>();
 		testWords.add("apple");
 		testWords.add("sand");
@@ -42,10 +43,18 @@ public class Test {
 		testWords.add("net");
 		testWords.add("never");
 		
+		
 		for(String k : testWords){
 			padding = getPadding(k.length());
 			fixedString = k + padding;
 			tree.insert(fixedString);
+		}
+		
+		for(int i =0; i < testWords.size();i++){
+		temp = tree.save.read(i); 
+			for(String s:temp.keys){
+				System.out.println(s);
+			}
 		}
 	}
 	public static void testFindPredecessor() throws IOException, ClassNotFoundException{
@@ -106,7 +115,7 @@ public class Test {
 	}//end prefex test
 	private static String getPadding(int wordLength){
 		int diffrence;
-		String pad ="x";
+		String pad =" ";
 		String padding = "";
 		diffrence = 34 - wordLength;
 		for(int i =0; i < diffrence;i++){
