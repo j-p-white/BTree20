@@ -1,22 +1,17 @@
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 public class Test {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		//JsoupTestStringManipulating();
-		testAdd();
+		//testAdd();
 		//testFindPredecessor();
 		//testDelete();
 		//testPrefexFind();
-		//testSave();
-		//testSave2();
-		
+		testSave3();	
+		testLongSave();
 	}
 	
 	public static void JsoupTestStringManipulating(){
@@ -52,42 +47,6 @@ public class Test {
 			fixedString = k + padding;
 			tree.insert(fixedString);
 		}
-		
-		Node temp1,temp2,temp3,temp4,temp5,temp6,temp7,temp8,root;
-		root = tree.per.read(0);
-		temp1 = tree.per.read(root.links.get(0));
-		temp2 = tree.per.read(root.links.get(1));
-		temp3 = tree.per.read(temp1.links.get(0));
-		temp4 = tree.per.read(temp1.links.get(1));
-		temp5 = tree.per.read(temp1.links.get(2));
-		temp6 = tree.per.read(temp2.links.get(0));
-		temp7 = tree.per.read(temp2.links.get(1));
-		temp8 = tree.per.read(temp2.links.get(2));
-		
-	/*
-		System.out.println("root: "+root.keys);
-		System.out.println("left: "+temp1.keys);
-		System.out.println("right: "+temp2.keys);
-		System.out.println("left 0: "+temp3.keys);
-		System.out.println(" left 1: "+temp4.keys);
-		System.out.println(" left 2: "+temp5.keys);
-		System.out.println(" right 0: "+temp6.keys);
-		System.out.println(" right 1: "+temp7.keys);
-		System.out.println(" right 2: "+temp8.keys);
-		System.out.println("node count: "+tree.getNodeCount());
-	*/
-		
-		System.out.println("root: "+root.getStartIndex());
-		System.out.println("left: "+temp1.getStartIndex());
-		System.out.println("right: "+temp2.getStartIndex());
-		System.out.println("left 0: "+temp3.getStartIndex());
-		System.out.println(" left 1: "+temp4.getStartIndex());
-		System.out.println(" left 2: "+temp5.getStartIndex());
-		System.out.println(" right 0: "+temp6.getStartIndex());
-		System.out.println(" right 1: "+temp7.getStartIndex());
-		System.out.println(" right 2: "+temp8.getStartIndex());
-		System.out.println("node count: "+tree.getNodeCount());
-
 	}
 	public static void testFindPredecessor() throws IOException, ClassNotFoundException{
 		BTree tree = new BTree();
@@ -147,7 +106,7 @@ public class Test {
 	}//end prefex test
 	private static String getPadding(int wordLength){
 		int diffrence;
-		String pad =" ";
+		String pad ="x";
 		String padding = "";
 		diffrence = 34 - wordLength;
 		for(int i =0; i < diffrence;i++){
@@ -155,79 +114,102 @@ public class Test {
 		}// end for
 		return padding;
 	}
-	
-	public static void testSave() throws IOException,ClassNotFoundException{
-		Node node = new Node(); 
-		node.keys.add("apple");
-		node.keys.add("math"); 
-		node.keys.add("sand");
+	public static void testSave3() throws IOException{
+		Flarf f = new Flarf(126,"flarf.dat");
+		byte [] temp; // loads ary2 and ary6
+		byte[]ary2 = new byte[126]; // ends out the node
+		byte[]ary3; // reads in the node
+		byte[]ary5 = new byte [34]; // gets stings back
+		byte[]ary6 = new byte [8]; // will gets longs
+		long l1,l2,l3;// longs for array
+		long l4; // gets the long back
+		l1 = 34; 
+		l2 = 68;
+		l3 = 102;
+		ArrayList<String> ary = new ArrayList<String>();
+		ArrayList<Long> ary4 = new ArrayList<Long>();
+		ary.add("apple"); 
+		ary.add("sand"); 
+		ary.add("math");
+		ary4.add(l1);
+		ary4.add(l2); 
+		ary4.add(l3);
+		int count =0;
 		
-		ByteArrayOutputStream b2 = new ByteArrayOutputStream();
-		ObjectOutputStream OOS = new ObjectOutputStream(b2);
-		OOS.writeObject(node);
-		byte[] array = b2.toByteArray();
-		ByteArrayInputStream in2 = new ByteArrayInputStream(array); 
-		ObjectInputStream OIS = new ObjectInputStream(in2);
-		Node temp = (Node) OIS.readObject();
-		OIS.close();
-		
-		for(String s : temp.keys){
-			System.out.println(s);
+		for(int i =0; i < ary.size();i++){
+			String s2 = ary.get(i);
+			String p = getPadding(s2.length());
+			s2 = s2 + p;
+			temp = s2.getBytes();
+				for(int j =0; j <temp.length;j++){
+					ary2[count] = temp[j]; 
+					count++;
+				}
 		}
-	}
-	
-	public static void testSave2() throws IOException,ClassNotFoundException{
-		ArrayList<Node>nodeList = new ArrayList<Node>();
-		RandomAccessFile raf = new RandomAccessFile("Test.dat","rw");
-		byte[] recivingAry;
-		Node node = new Node(); 
-		Node node2 = new Node();
-		node.setStartIndex(0);
-		node2.setStartIndex(560);
-		node.keys.add("apple");
-		node.keys.add("math"); 
-		node.keys.add("sand");
-		node2.keys.add("candle");
-		node2.keys.add("final"); 
-		node2.keys.add("better");
-		node.links.add((long) 560);
-		nodeList.add(node);
-		nodeList.add(node2);
-		
-		
-		ByteArrayOutputStream b2 = new ByteArrayOutputStream();
-		ObjectOutputStream OOS = new ObjectOutputStream(b2);
-		for(Node n : nodeList){
-			OOS.writeObject(n);
-			byte[] array = b2.toByteArray();
-			raf.write(array);
+		for(int i =0; i < ary4.size();i++){
+				temp = toByte(ary4.get(i));
+				for(int  j =0; j <temp.length;j++){
+					ary2[count] = temp[j];
+					count++;
+				}
 		}
-	//	byte[] array = b2.toByteArray();
-	//	raf.write(array);
-		recivingAry = new byte[560];
-		raf.seek(0);
-		raf.read(recivingAry);
-		ByteArrayInputStream in2 = new ByteArrayInputStream(recivingAry); 
-		ObjectInputStream OIS = new ObjectInputStream(in2);
-		Node temp = (Node) OIS.readObject();
-		if(temp.links.size()!= 0){
-			recivingAry = new byte[560];
-			//System.out.raf.length();
-			raf.seek(temp.links.get(0));
-			raf.read(recivingAry);
-			ByteArrayInputStream in1 = new ByteArrayInputStream(recivingAry); 
-			ObjectInputStream OIS1 = new ObjectInputStream(in2);
-			Node temp1 = (Node) OIS.readObject();	
-			
-			for(String s1:temp1.keys){
-				System.out.println(s1);
+		
+		
+		System.out.println("ary2 length: "+ ary2.length);
+		f.write(ary2, 0);
+		System.out.println("all writen");
 				
-			}
-		}
-		OIS.close();
+		ary3 = f.read(0);
+		System.out.println("filled ary length: "+ary3.length);
+	
+		System.arraycopy(ary3, 0, ary5, 0, 34);
+		String s2 = new String(ary5);
+		System.out.println(s2);
+				
+		System.arraycopy(ary3, 34, ary5, 0, 34);
+		String s3 = new String(ary5);
+		System.out.println(s3);
+					
+		System.arraycopy(ary3, 68, ary5, 0, 34);
+		String s4 = new String(ary5);
+		System.out.println(s4);
+		// get longs
+		System.arraycopy(ary3, 102, ary6, 0, 8);
+		l4 = toLong(ary6);
+		System.out.println(l4);
 		
-		for(String s : temp.keys){
-			System.out.println(s);
-		}
+		System.arraycopy(ary3, 110, ary6, 0, 8);
+		l4 = toLong(ary6);
+		System.out.println(l4);
+		
+		System.arraycopy(ary3, 118, ary6, 0, 8);
+		l4 = toLong(ary6);
+		System.out.println(l4);
+	}	
+	
+	public static void testLongSave(){
+		long test = 89078;
+		long check;
+		byte [] get; 
+		get = toByte(test);
+		check = toLong(get);
+		
+		System.out.println("my value: "+ check);
 	}
+	
+	public static byte[] toByte(long l){
+		ByteBuffer buf = ByteBuffer.allocate(8);
+		buf.putLong(l); 
+		return buf.array();
+	}
+	
+	public static long toLong(byte[] b){
+		ByteBuffer buf = ByteBuffer.allocate(8);
+		buf.put(b);
+		buf.flip();
+		return buf.getLong();
+	}
+	
+	
+	
 }//end class 

@@ -9,8 +9,7 @@ public class Node implements Serializable{
 	final int middle = MAXKEYS/2;
 	ArrayList<String> keys = new ArrayList<String>(); 
 	ArrayList<Long> links = new ArrayList<Long>();
-	int incrementSize =2052;
-	long startIndex;
+	int blockNumber;
 	BTree tree;
 	public Node(){
 
@@ -62,10 +61,10 @@ public class Node implements Serializable{
 	//look over how i write to splits
 	public void rootSplit(int nodeCount) throws IOException{
 		int leftCount = nodeCount -1;
-		long offLeft = (leftCount * incrementSize);
-		long offRight = (nodeCount * incrementSize);
 		Node myLeft = makeNewLeft();
 		Node myRight = makeNewRight();
+		myLeft.setBlocknumber(leftCount);
+		myRight.setBlocknumber(nodeCount);
 		if(!links.isEmpty()){
 			addLeftLinks(myLeft); 
 			addRightLinks(myRight);
@@ -276,11 +275,11 @@ public class Node implements Serializable{
 		}
 		return result;
 	}// end minSize
-	public void setStartIndex(long startIndex){
-		this.startIndex = startIndex;
+	public void setBlocknumber(int blockNumber){
+		this.blockNumber = blockNumber;
 	}
-	public long getStartIndex(){
-		return startIndex;
+	public int getStartIndex(){
+		return blockNumber;
 	}
 	public ArrayList<Node> getNode(){
 		return temp;

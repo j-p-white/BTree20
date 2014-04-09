@@ -7,20 +7,13 @@ public class BTree implements Serializable {
 	private static final long serialVersionUID = 1L;
 	Node root;
 	int nodeCount;
-	Persistance per;
 	public BTree() throws IOException{
 		root = new Node();
-		root.setStartIndex(0);
 		nodeCount = 0;
-		per = new Persistance();
 	}// end BTree
 	
 	public void insert(String value) throws IOException, ClassNotFoundException{
-		long inital = per.raf.length();
-		
-		if(inital != 0){
 			root = per.read(0);
-		}
 		if(root.isFull()){
 			nodeCount = nodeCount +2;
 			root.rootSplit(nodeCount);
