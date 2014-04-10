@@ -109,6 +109,10 @@ public class Node implements Serializable{
 	
 	private void addRightLinks(Node right){
 			right.links.addAll(links);
+			if(right.links.get(0) > right.links.get(1)){
+				long temp = right.links.remove(0);
+				right.links.add(temp);
+			}
 			links.clear();
 	}//end add right links
 	
@@ -159,14 +163,20 @@ public class Node implements Serializable{
 		//write node back to file
 		Node temp = new Node(); 
 		Node temp2 = new Node();
-		long nodeLocA = links.get(count -1);
-		long nodeLocB = links.get(count +1);
-		temp = tree.save.read(nodeLocA);
-		temp2 = tree.save.read(nodeLocB);
-		if(count != 0 && temp.keys.size() > middle ){
-			rotateLeft(count);
-			tree.save.write(temp);
+
+		if(count != 0){
+			long nodeLocA = links.get(count -1);
+			temp = tree.save.read(nodeLocA);
+			
+			if(temp.keys.size() > middle){
+				rotateLeft(count);
+				tree.save.write(temp);
+			}
+			long nodeLocB = links.get(count +1);
+			temp2 = tree.save.read(nodeLocB);
+
 		}
+
 		else if(temp2.keys.size() > middle){
 			rotateRight(count);
 			tree.save.write(temp2);

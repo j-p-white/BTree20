@@ -62,6 +62,7 @@ public class BTree implements Serializable {
 						for(Node n: node.getNode()){
 							save.write(n);
 						}
+						save.write(node);
 						i = 0;
 					}//end if
 				}//end for
@@ -77,6 +78,7 @@ public class BTree implements Serializable {
 					for(Node n: node.getNode()){
 						save.write(n);
 					}
+					save.write(node);
 					i = 0;
 				}//end if
 			}//end for
@@ -130,6 +132,8 @@ public class BTree implements Serializable {
 	public void delete(String value) throws ClassNotFoundException, IOException{
 		root = save.read(0);
 	  if(search(value)){
+		  String p = getWordPadding(value.length());
+		  value = value + p;
 		  delete(root,value);
 		  if(root.keys.size() == 0){
 		  // reset root
@@ -242,4 +246,15 @@ public class BTree implements Serializable {
 	public int getNodeCount(){
 		return nodeCount;
 	}//end nodeCount
+	
+	private String getWordPadding(int wordLength){
+		int diffrence;
+		String pad =" ";
+		String padding = "";
+		diffrence = 34 - wordLength;
+		for(int i =0; i < diffrence;i++){
+			padding = padding + pad;
+		}// end for
+		return padding;
+	}	
 }//end class

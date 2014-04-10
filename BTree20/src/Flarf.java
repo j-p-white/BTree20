@@ -24,6 +24,4 @@ public class Flarf extends RandomAccessFile implements Serializable {
 		write(b);
 		return;
 	}
-	
-
 }

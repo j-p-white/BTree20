@@ -6,9 +6,9 @@ public class Test {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		//JsoupTestStringManipulating();
-		testAdd();
+		//testAdd();
 		//testFindPredecessor();
-		//testDelete();
+		testDelete();
 		//testPrefexFind();
 		//testSave3();	
 		//testLongSave();
@@ -34,12 +34,15 @@ public class Test {
 		testWords.add("apple");
 		testWords.add("sand");
 		testWords.add("math");
+		
 		testWords.add("tree");
 		testWords.add("north");
 		testWords.add("onion");
+		
 		testWords.add("pan");
 		testWords.add("pink");
 		testWords.add("pool");
+		
 		testWords.add("net");
 		testWords.add("never");
 		
@@ -83,7 +86,7 @@ public class Test {
 		tree.insert("pool"); 
 		tree.insert("net");
 		tree.insert("never");
-		tree.delete("apple");
+		tree.delete("north");
 	/*	
 		System.out.println("root: "+tree.getRoot().keys);
 		System.out.println("left: "+tree.getRoot().links.get(0).keys);

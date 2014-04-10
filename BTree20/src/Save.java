@@ -36,7 +36,7 @@ public class Save {
 		for(String k:n.keys){
 			if(k.length() < STRINGLENGTH){
 			 String p = getWordPadding(k.length());
-				k = p + k;
+				k = k+p;
 			}
 			temp = k.getBytes();
 			
