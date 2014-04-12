@@ -146,7 +146,7 @@ public class BTree implements Serializable {
 	}
 	private void delete(Node node, String Val) throws ClassNotFoundException, IOException{
 		int count = 0;
-		Node temp = new Node();
+		Node badLink = new Node();
 		String predecessorVal;
 		if(node.keys.contains(Val)){ // need to fix this with find
 			if(node.isLeaf()){
@@ -168,12 +168,13 @@ public class BTree implements Serializable {
 			}//end else
 		}
 		else{
+			
 			delete(findLink(node,Val),Val);
 			for(int i =0; i < node.links.size();i++){
 				long nodeLocA = node.links.get(i);
-				temp = save.read(nodeLocA);
-				if(temp.minSize()){
-					node.repair(i);
+				badLink = save.read(nodeLocA);
+				if(badLink.minSize()){
+					repair(i,node,badLink);
 					i = 0;
 				}// end if
 			}//end for
@@ -257,4 +258,29 @@ public class BTree implements Serializable {
 		}// end for
 		return padding;
 	}	
+	
+	// need to put repair logic from node to tree
+	public void repair(int count,Node n,Node badLink) throws ClassNotFoundException, IOException{
+		Node neighbor = new Node();
+		if( count !=0 && n.links.get(count -1) !=null){
+				neighbor = save.read(n.links.size() -1);
+				if( neighbor.keys.size() > neighbor.middle){
+					n.rotateLeft(badLink,neighbor,count);
+				}
+		}
+		else if(n.links.get(count+1) != null){
+				neighbor = save.read(n.links.size() +1);
+				if( neighbor.keys.size() > neighbor.middle){
+					n.rotateRight(badLink,neighbor,count);
+				}
+		}
+		else{
+			           neighbor = save.read(n.links.get(count +1));
+			           n.merge(badLink, neighbor, count);
+		}
+				for(Node t: n.getNode()){
+					save.write(t);
+				}
+	}
+	
 }//end class

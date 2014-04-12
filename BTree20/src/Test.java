@@ -74,30 +74,42 @@ public class Test {
 		System.out.println("get predicessor: "+tree.getRoot().predacessor(0));
 	}	
 	public static void testDelete() throws IOException, ClassNotFoundException{
-		BTree tree = new BTree();
-		tree.insert("apple"); 
-		tree.insert("sand");
-		tree.insert("math");
-		tree.insert("tree");
-		tree.insert("north");
-		tree.insert("onion");
-		tree.insert("pan");
-		tree.insert("pink");
-		tree.insert("pool"); 
-		tree.insert("net");
-		tree.insert("never");
-		tree.delete("north");
-	/*	
-		System.out.println("root: "+tree.getRoot().keys);
-		System.out.println("left: "+tree.getRoot().links.get(0).keys);
-		System.out.println("right: "+tree.getRoot().links.get(1).keys);
-		System.out.println(" left 0: "+tree.getRoot().links.get(0).links.get(0).keys);
-		System.out.println(" left 1: "+tree.getRoot().links.get(0).links.get(1).keys);
-		//System.out.println(" left 2: "+tree.getRoot().links.get(0).links.get(2).keys);
-		System.out.println(" right 0: "+tree.getRoot().links.get(1).links.get(0).keys);
-		System.out.println(" right 1: "+tree.getRoot().links.get(1).links.get(1).keys);
-		System.out.println(" right 2: "+tree.getRoot().links.get(1).links.get(2).keys);
-	*/
+		BTree tree = new BTree();	
+		String padding,fixedString;
+		Node temp = new Node();
+		ArrayList<String> testWords = new ArrayList<String>();
+		testWords.add("apple");
+		testWords.add("sand");
+		testWords.add("math");
+		
+		testWords.add("tree");
+		testWords.add("north");
+		testWords.add("onion");
+		
+		testWords.add("pan");
+		testWords.add("pink");
+		testWords.add("pool");
+		
+		testWords.add("net");
+		testWords.add("never");
+
+		for(String k : testWords){
+			padding = getPadding(k.length());
+			fixedString = k + padding;
+			tree.insert(fixedString);
+		}
+		tree.delete("north                             ");
+		testWords.remove("north");
+		for(int i =0; i < testWords.size();i++){
+		temp = tree.save.read(i); 
+			for(String s:temp.keys){
+				System.out.println(s);
+			}
+		}
+		
+		
+		
+		
 	}
 	
 	public static void testPrefexFind() throws IOException, ClassNotFoundException{

@@ -159,107 +159,68 @@ public class Node implements Serializable{
 		}
 	}
 	
-	public void repair(int count) throws ClassNotFoundException, IOException{
-		//write node back to file
-		Node temp = new Node(); 
-		Node temp2 = new Node();
-
-		if(count != 0){
-			long nodeLocA = links.get(count -1);
-			temp = tree.save.read(nodeLocA);
-			
-			if(temp.keys.size() > middle){
-				rotateLeft(count);
-				tree.save.write(temp);
-			}
-			long nodeLocB = links.get(count +1);
-			temp2 = tree.save.read(nodeLocB);
-
-		}
-
-		else if(temp2.keys.size() > middle){
-			rotateRight(count);
-			tree.save.write(temp2);
-		}
-		else{
-			merge(count);
-		}
-	}// end steal
 	// need to get the link before i remove the key---error
-	private void rotateLeft(int count) throws ClassNotFoundException, IOException{
+	public void rotateLeft(Node deficient, Node overfull,int count) throws ClassNotFoundException, IOException{
 		String parentKey;
 		String replaceKey;
-		Node temp;
-		Node temp2;
-		long nodeLocA = links.get(count -1);
-		long nodeLocB = links.get(count);
-		int apple =tree.save.read(nodeLocA).keys.size()-1;
+		int apple =overfull.keys.size()-1;
 		
 		//get the link to the deficient right node
-		temp2 = tree.save.read(nodeLocA);
-		temp = tree.save.read(nodeLocB);
 		
 		// the parent key
 		parentKey = keys.remove(count -1 );
 		// parent key is placed in deficient right node brining it to minimum
-		temp.keys.add(0,parentKey);
+		deficient.keys.add(0,parentKey);
 		// get the key from the over full left node
-		replaceKey = temp2.keys.remove(apple);
+		replaceKey = overfull.keys.remove(apple);
 		
 		//put the new key in the proper spot.
 		keys.add(count -1,replaceKey);
 		
 		//write node back to file
-		tree.save.write(temp);
-		tree.save.write(temp2);
+		temp.clear();
+		temp.add(overfull);
+		temp.add(deficient);
 	}
 	
-	private void rotateRight(int count) throws ClassNotFoundException, IOException{
+	public void rotateRight(Node dificent,Node overfull, int count) throws ClassNotFoundException, IOException{
 		String parentKey;
 		String replaceKey;
-		long nodeLocA = links.get(count); 
-		long nodeLocB = links.get(count+1);
-		Node temp = tree.save.read(nodeLocA);
-		Node temp2 = tree.save.read(nodeLocB);
+
 		//the parent key
 		parentKey = keys.remove(count);
 		//parent key is placed in deficient left node brining it to minimum
-		temp.keys.add(parentKey);
+		dificent.keys.add(parentKey);
 		//get the key from the over full right node
-		replaceKey = temp2.keys.remove(0);
+		replaceKey = overfull.keys.remove(0);
 		//put the new key in the proper spot 
 		keys.add(count,replaceKey);
 		
 		//write node back to file
-		tree.save.write(temp);
-		tree.save.write(temp2);
+		temp.clear();
+		temp.add(dificent);
+		temp.add(overfull);
 	}
 	
-	private void merge(int count) throws ClassNotFoundException, IOException{
+	public void merge(Node rightLink,Node leftLink, int count) throws ClassNotFoundException, IOException{
 		String parentKey;
-		Node temp,temp2;
-		long nodeLocA = links.get(count+1);
-		long nodeLocB = links.get(count);
 		
-		temp = tree.save.read(nodeLocA);
-		temp2 = tree.save.read(nodeLocB);
-		//get the parentKey
 		parentKey = keys.remove(count);
 		
-		//put parentKey into right link 
-		temp.keys.add(0,parentKey);
-			// put left values into right values
-		for(String s: temp2.keys) {
-			temp.keys.add(0,s);
+		rightLink.keys.add(0,parentKey);
+		
+		// put left values into right values
+		for(String s: leftLink.keys) {
+			rightLink.keys.add(0,s);
 		}// end for
-			//left links go into rights links
-		for(long Link: temp2.links){
-				temp.links.add(0,Link);
+		//left links go into rights links
+		for(long Link: leftLink.links){
+				rightLink.links.add(0,Link);
 		}// end for
 		
 		links.remove(count);
-		
-		tree.save.write(temp);
+		temp.clear();
+		temp.add(rightLink);
 	}// end merge
 	
 	public String predacessor(int count) throws ClassNotFoundException, IOException{
