@@ -109,10 +109,12 @@ public class Node implements Serializable{
 	
 	private void addRightLinks(Node right){
 			right.links.addAll(links);
+		/*	
 			if(right.links.get(0) > right.links.get(1)){
 				long temp = right.links.remove(0);
 				right.links.add(temp);
 			}
+		*/
 			links.clear();
 	}//end add right links
 	

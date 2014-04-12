@@ -29,6 +29,16 @@ public class BTree implements Serializable {
 			root = save.read(0);
 		}
 			insert(root, value);	
+			
+			if(root.isFull()){
+				nodeCount = nodeCount +2;
+				root.rootSplit(nodeCount);
+				for(Node n:root.getNode()){
+					save.write(n);
+				}
+				save.write(root);
+				root = save.read(0);
+			}
 			save.write(root);
 		
 	}//end public add 
@@ -259,7 +269,7 @@ public class BTree implements Serializable {
 		return padding;
 	}	
 	
-	// need to put repair logic from node to tree
+	//having a inifnate loop here
 	public void repair(int count,Node n,Node badLink) throws ClassNotFoundException, IOException{
 		Node neighbor = new Node();
 		if( count !=0 && n.links.get(count -1) !=null){
@@ -268,19 +278,26 @@ public class BTree implements Serializable {
 					n.rotateLeft(badLink,neighbor,count);
 				}
 		}
-		else if(n.links.get(count+1) != null){
+		 if(count+1 != n.links.size()){
 				neighbor = save.read(n.links.size() +1);
 				if( neighbor.keys.size() > neighbor.middle){
 					n.rotateRight(badLink,neighbor,count);
 				}
 		}
-		else{
-			           neighbor = save.read(n.links.get(count +1));
-			           n.merge(badLink, neighbor, count);
+		
+		 if(count+1 == n.links.size()){
+			    neighbor = save.read(n.links.get(count -1));
+			    n.merge(badLink, neighbor, count -1);
+		 }
+		 else{
+			 neighbor = save.read(n.links.get(count +1));
+			 n.merge(neighbor, badLink, count);
+		 }
+			    
+		
+		for(Node t: n.getNode()){
+				save.write(t);
 		}
-				for(Node t: n.getNode()){
-					save.write(t);
-				}
+		save.write(n);
 	}
-	
 }//end class

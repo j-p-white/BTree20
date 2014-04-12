@@ -55,8 +55,13 @@ public class Test {
 		
 		for(int i =0; i < testWords.size();i++){
 		temp = tree.save.read(i); 
+		System.out.println("block number: "+temp.blockNumber);
 			for(String s:temp.keys){
 				System.out.println(s);
+			}
+			for(long l : temp.links){
+				System.out.println("blocksLinks: "+ l);
+				System.out.println("\n");
 			}
 		}
 	}
@@ -98,15 +103,22 @@ public class Test {
 			fixedString = k + padding;
 			tree.insert(fixedString);
 		}
-		tree.delete("north                             ");
+		tree.delete("apple");
+		testWords.remove("apple");
+		tree.delete("north");
 		testWords.remove("north");
+
 		for(int i =0; i < testWords.size();i++){
 		temp = tree.save.read(i); 
+		System.out.println("block number: "+temp.blockNumber);
 			for(String s:temp.keys){
 				System.out.println(s);
 			}
+			for(long l : temp.links){
+				System.out.println("blocksLinks: "+ l);
+				System.out.println("\n");
+			}
 		}
-		
 		
 		
 		
