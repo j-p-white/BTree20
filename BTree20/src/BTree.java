@@ -135,6 +135,7 @@ public class BTree implements Serializable {
 			}//end else
 		}// end for
 		long nodeLocA = node.links.get(count);
+		save.write(node);
 			temp = save.read(nodeLocA);
 			return temp;
 	}//end find value
@@ -272,20 +273,27 @@ public class BTree implements Serializable {
 	//having a inifnate loop here
 	public void repair(int count,Node n,Node badLink) throws ClassNotFoundException, IOException{
 		Node neighbor = new Node();
+		Node neighborL = new Node();
+		Node neighborR = new Node();
+		
 		if( count !=0 && n.links.get(count -1) !=null){
-				neighbor = save.read(n.links.size() -1);
-				if( neighbor.keys.size() > neighbor.middle){
-					n.rotateLeft(badLink,neighbor,count);
-				}
+				neighborL = save.read(n.links.get(count -1));
 		}
 		 if(count+1 != n.links.size()){
-				neighbor = save.read(n.links.size() +1);
-				if( neighbor.keys.size() > neighbor.middle){
-					n.rotateRight(badLink,neighbor,count);
-				}
+				neighborR = save.read(n.links.get(count+1));
+		 }
+		 
+		
+		if( neighborL.keys.size() > neighborL.middle){
+			
+				n.rotateLeft(badLink,neighborL,count);		
+		}
+
+		else if( neighborR.keys.size() > neighbor.middle){
+				n.rotateRight(badLink,neighborR,count);
 		}
 		
-		 if(count+1 == n.links.size()){
+		else if(count+1 == n.links.size()){
 			    neighbor = save.read(n.links.get(count -1));
 			    n.merge(badLink, neighbor, count -1);
 		 }

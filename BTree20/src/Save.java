@@ -13,6 +13,7 @@ public class Save {
 	final int NUMBLINKBYTES = 32;
 	final int TOTALNODESIZE = 142;
 	Flarf saveFile = new Flarf(TOTALNODESIZE,"Btree.dat");
+	
 	public Save() throws FileNotFoundException{
 		 
 	}

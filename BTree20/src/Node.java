@@ -11,6 +11,7 @@ public class Node implements Serializable{
 	ArrayList<Long> links = new ArrayList<Long>();
 	long blockNumber;
 	BTree tree;
+	
 	public Node(){
 
 	}
