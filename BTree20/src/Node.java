@@ -125,42 +125,7 @@ public class Node implements Serializable{
 		links.add(offright);
 	}
 	
-	public void internalRepair(int count) throws ClassNotFoundException, IOException{
-		Node temp,temp2;
-		 long nodeLocA = links.get(count);
-		temp =  tree.save.read(nodeLocA);
-		goRightRepair(temp,count+1);
-		for(int i = 0; i < links.size();i++){
-			long nodeLocB = links.get(i);
-			temp2 = tree.save.read(nodeLocB);
-			if(temp2.minSize()){
-				repair(i);
-				i = 0;
-				tree.save.write(temp2);
-			}
-		}
-	}// end internalRepair
 	
-	//will repair upto the internal node
-	public void goRightRepair(Node myNode,int count) throws ClassNotFoundException, IOException{
-		if(myNode.isLeaf()){
-			return;
-		}//end if
-		else{
-			goRightRepair(tree.save.read(myNode.links.get(count)),count);
-			Node temp;
-			for(int i = 0; i < links.size();i++){
-				long nodeLocA = links.get(i);
-				temp = tree.save.read(nodeLocA);
-				if(temp.minSize()){
-					repair(i);
-					i = 0;
-					tree.save.write(temp);
-					
-				}
-			}
-		}
-	}
 	
 	// need to get the link before i remove the key---error
 	public void rotateLeft(Node deficient, Node overfull,int count) throws ClassNotFoundException, IOException{
@@ -226,22 +191,9 @@ public class Node implements Serializable{
 		temp.add(rightLink);
 	}// end merge
 	
-	public String predacessor(int count) throws ClassNotFoundException, IOException{
-		long nodeLocA = links.get(count);
-		Node temp = tree.save.read(nodeLocA);
-		return goRight(temp,count+1);
-	}
+
 	
-	public String goRight(Node myNode,int count) throws ClassNotFoundException, IOException{
-		String toReturn;
-		if(myNode.isLeaf()){
-		toReturn = myNode.keys.remove(myNode.keys.size()-1);
-		}//end if
-		else{
-			toReturn = goRight(tree.save.read(myNode.links.get(count)),count);
-		}
-		return toReturn;
-	}
+
 	public boolean minSize(){
 		boolean result; 
 		if(keys.size() < MAXKEYS/2){

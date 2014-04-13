@@ -104,9 +104,10 @@ public class Test {
 			tree.insert(fixedString);
 		}
 		tree.delete("apple");
-		testWords.remove("apple");
 		tree.delete("north");
-		testWords.remove("north");
+		tree.delete("pink");
+		//tree.delete("net");
+		tree.delete("onion");
 
 		for(int i =0; i < testWords.size();i++){
 		temp = tree.save.read(i); 
