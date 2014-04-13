@@ -207,30 +207,36 @@ public class BTree implements Serializable {
 	}
 	
 	public ArrayList<String> findPrefix(String Pre) throws ClassNotFoundException, IOException{
+		root = save.read(0);
 		return findPrefix(root,Pre);
 	}
 	
-	private ArrayList<String> findPrefix(Node node, String Pre) throws ClassNotFoundException, IOException{
+	private ArrayList<String> findPrefix(Node node, String pre) throws ClassNotFoundException, IOException{
 		ArrayList<String> valueList = new ArrayList<String>();
 		Node temp = new Node();
 		Node temp2 = new Node();
 		for(int i = 0; i < node.keys.size();i++){
-			if(node.keys.get(i).startsWith(Pre)||node.keys.get(i).compareTo(Pre)>0){
-				long nodeLocA = node.links.get(i);
-				long nodeLocB = node.links.get(i+1);
-				temp = save.read(nodeLocA);
-				temp2 = save.read(nodeLocB);
+			String[] s = node.keys.get(i).split("\\s+");
+			if(s[0].indexOf(pre) != -1||s[0].compareTo(pre)>0){
+				if(node.links.size()!= 0){
+					if(node.links.get(i) != null){
+						temp = save.read(node.links.get(i));
+					}
+					if(node.links.get(i+1) != null){
+						temp2 = save.read(node.links.get(i+1));
+					}
+				}
 				if(!node.isLeaf()){
-					checkLists(valueList,findPrefix(temp,Pre));
+					checkLists(valueList,findPrefix(temp,pre));
 					//if(node.links.get(i +1)!= null){
 					// valueList.addAll(findPrefix(node.links.get(i+1),Pre));
 					//}
 				}
 				if(!node.isLeaf() && node.links.get(i +1)!= null){
-					checkLists(valueList,findPrefix(temp2,Pre));
+					checkLists(valueList,findPrefix(temp2,pre));
 				}
-				if(node.keys.get(i).startsWith(Pre)){
-					if(!valueList.contains(node.keys.get(i))){
+				if(s[0].indexOf(pre)!= -1){
+					if(!valueList.contains(s[0])){
 						valueList.add(node.keys.get(i));
 					}
 				}// end three if's
@@ -238,7 +244,7 @@ public class BTree implements Serializable {
 			}// end big if 
 			else if(i == node.keys.size()-1){
 				if(!node.isLeaf() && node.links.get(i+1)!=null){ // Potently issue
-					valueList.addAll(findPrefix(temp2,Pre));
+					valueList.addAll(findPrefix(temp2,pre));
 				}//end one last check if 
 			}// end end-of-rope else
 		}// end for
