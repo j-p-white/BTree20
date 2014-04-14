@@ -8,10 +8,15 @@ public class BTree implements Serializable {
 	Node root;
 	int nodeCount;
 	Save save;
-	public BTree() throws IOException{
+	public BTree(){
 		root = new Node();
 		nodeCount = 0;
+		try{
 		save = new Save();
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
 	}// end BTree
 	
 	public void insert(String value) throws IOException, ClassNotFoundException{
@@ -47,10 +52,11 @@ public class BTree implements Serializable {
 		int count= 0;
 		Node temp = new Node();
 		Node looking = new Node();
+		String[] s = val.split("\\s+");
 		if(node.isLeaf())
 		{
-			for(String letter: node.keys){
-				if(val.compareTo(letter)>0){
+			for(String word: node.keys){
+				if(s[0].compareTo(word)>0){
 					count++;
 				}
 				else{
@@ -76,7 +82,7 @@ public class BTree implements Serializable {
 						i = 0;
 					}//end if
 				}//end for
-			temp = findLink(node,val);
+			temp = findLink(node,s[0]);
 			insert(temp,val);
 			
 			for(int i =0;i < node.links.size();i++){
@@ -127,7 +133,8 @@ public class BTree implements Serializable {
 		int count = 0;
 		Node temp = new Node();
 		for(String w: node.keys){
-			if(value.compareTo(w)>0){
+			String[] s = w.split("\\s+");
+			if(value.compareTo(s[0])>0){
 				count++;
 			}//end if
 			else{
@@ -292,8 +299,7 @@ public class BTree implements Serializable {
 		 
 		
 		if( neighborL.keys.size() > neighborL.middle){
-			
-				n.rotateLeft(badLink,neighborL,count);		
+				n.rotateLeft(badLink,neighborL,count);	
 		}
 
 		else if( neighborR.keys.size() > neighbor.middle){

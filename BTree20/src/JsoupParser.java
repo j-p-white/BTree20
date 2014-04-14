@@ -15,6 +15,10 @@ import org.jsoup.nodes.Document;
  */
 public class JsoupParser {
 	BTree tree;
+	
+	public JsoupParser(BTree tree){
+		this.tree = tree;
+	}
 	public void readInFile(){ 
 		Scanner scan;
 		String url;
@@ -47,12 +51,12 @@ public class JsoupParser {
 		}
 	}//end readInFile
 	
-	public String hookStrings(String withSpace, String toConnect){
+	private String hookStrings(String withSpace, String toConnect){
 		String pad = " ";
 		return withSpace = withSpace+pad+ toConnect;
 	}
 	
-	public String getPadding(int wordLength){
+	private String getPadding(int wordLength){
 		int diffrence;
 		String pad =" ";
 		String padding = "";
@@ -63,11 +67,11 @@ public class JsoupParser {
 		return padding;
 	}
 	
-	public String[] urlTrimming(String url){
+	private String[] urlTrimming(String url){
 		return url.split("[.]+");
 	}
 	
-	public String[] JsoupParsing(String url) throws IOException{
+	private String[] JsoupParsing(String url) throws IOException{
 		Document doc;
 		String bodyText;
 		//get the url
