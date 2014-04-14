@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Node implements Serializable{
 	private static final long serialVersionUID = 1L;
 	ArrayList<Node> temp = new ArrayList<Node>();
-	final int MAXKEYS = 3; //31
+	final int MAXKEYS = 31; //3 is test 
 	final int middle = MAXKEYS/2;
 	ArrayList<String> keys = new ArrayList<String>(); 
 	ArrayList<Long> links = new ArrayList<Long>();

@@ -6,12 +6,12 @@ import java.nio.ByteBuffer;
 public class Save {
 	
 	byte[] getBytes;
-	final int STRINGLENGTH = 34;
-	final int OFFSETBYTELENGTH = 8;
-	final int STARTLINKBYTES = 102;
-	final int NODEBLOCKLOCATIONPOS = 134;
-	final int NUMBLINKBYTES = 32;
-	final int TOTALNODESIZE = 142;
+	final int STRINGLENGTH = 34; // the length of each string
+	final int OFFSETBYTELENGTH = 8; // length of each long
+	final int STARTLINKBYTES = 1054; // where the links start
+	final int NODEBLOCKLOCATIONPOS = 1310; // where the nodes block number is
+	final int NUMBLINKBYTES = 256; // the number of links in bytes
+	final int TOTALNODESIZE = 1318; // total size of the node
 	Flarf saveFile = new Flarf(TOTALNODESIZE,"Btree.dat");
 	
 	public Save() throws FileNotFoundException{
@@ -31,7 +31,6 @@ public class Save {
 	private byte[] packNode(Node n){
 		byte [] nodeBytes = new byte [TOTALNODESIZE];
 		byte [] nodeLinkBytes = new byte [NUMBLINKBYTES];
-	//	byte [] nodeLoc = new byte[8];
 		int count = 0;
 		byte [] temp; 
 		for(String k:n.keys){
@@ -58,7 +57,6 @@ public class Save {
 				}
 			}
 		}
-		
 		 int x = 0;
 		for(long l: n.links){
 			temp =toByte(l);

@@ -18,12 +18,17 @@ public class BTree implements Serializable {
 			e.printStackTrace();
 		}
 	}// end BTree
-	
+	// some how more links are being made then should be. 
 	public void insert(String value) throws IOException, ClassNotFoundException{
 		if(root.keys.size() >0){
 			root = save.read(0);
 		}
+		String[] s = value.split("\\s+");
+		if(search(s[0])){
 			
+		}
+		else{
+		
 		if(root.isFull()){
 			nodeCount = nodeCount +2;
 			root.rootSplit(nodeCount);
@@ -45,7 +50,7 @@ public class BTree implements Serializable {
 				root = save.read(0);
 			}
 			save.write(root);
-		
+		}
 	}//end public add 
 	
 	private void insert(Node node,String val) throws IOException, ClassNotFoundException{
@@ -94,6 +99,7 @@ public class BTree implements Serializable {
 					for(Node n: node.getNode()){
 						save.write(n);
 					}
+					printTree(nodeCount);
 					save.write(node);
 					i = 0;
 				}//end if
@@ -371,6 +377,21 @@ public class BTree implements Serializable {
 					i = 0;
 					save.write(temp);
 				}
+			}
+		}
+	}
+	
+	public void printTree(int count) throws IOException{
+		Node temp;
+		for(int i =0; i < count;i++){
+		temp = save.read(i); 
+		System.out.println("block number: "+temp.blockNumber);
+			for(String s:temp.keys){
+				System.out.println(s);
+			}
+			for(long l : temp.links){
+				System.out.println("blocksLinks: "+ l);
+				System.out.println("\n");
 			}
 		}
 	}
