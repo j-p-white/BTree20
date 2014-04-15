@@ -191,7 +191,6 @@ public class Node implements Serializable{
 		temp.clear();
 		temp.add(rightLink);
 	}// end merge
-	
 	public boolean minSize(){
 		boolean result; 
 		if(keys.size() < MAXKEYS/2){
