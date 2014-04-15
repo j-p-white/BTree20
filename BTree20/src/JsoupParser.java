@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.io.File; 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import org.jsoup.*;
@@ -15,7 +16,13 @@ import org.jsoup.nodes.Document;
  */
 public class JsoupParser {
 	BTree tree;
-	public void readInFile(){ 
+	ArrayList<String> runningList; 
+	
+	public JsoupParser(BTree tree){
+		this.tree = tree;
+		runningList = new ArrayList<String>();
+	}
+	public void readInFile() throws ClassNotFoundException{
 		Scanner scan;
 		String url;
 		String paddedWord = null;
@@ -29,15 +36,15 @@ public class JsoupParser {
 					fileWords = JsoupParsing(url);
 					String trimmedUrl = urlTrimming(url)[1];
 					for(String words:fileWords){
-						if(words.length() < 34){
-							paddedWord = hookStrings(words,trimmedUrl) + getPadding(hookStrings(words,trimmedUrl).length());
-						}// end wordsIf	
-						try {
-							tree.insert(paddedWord);
-						} catch (ClassNotFoundException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+						if(words.equals("-999")){
+							//do nothing
+							System.out.println("found dup");
 						}
+						else if(words.length() < 34){
+							paddedWord = hookStrings(words,trimmedUrl) + getPadding(hookStrings(words,trimmedUrl).length());
+							tree.insert(paddedWord);
+						}// end wordsIf	
+							
 					}//end for
 				}//end scanner while
 			scan.close();			
@@ -47,12 +54,12 @@ public class JsoupParser {
 		}
 	}//end readInFile
 	
-	public String hookStrings(String withSpace, String toConnect){
+	private String hookStrings(String withSpace, String toConnect){
 		String pad = " ";
 		return withSpace = withSpace+pad+ toConnect;
 	}
 	
-	public String getPadding(int wordLength){
+	private String getPadding(int wordLength){
 		int diffrence;
 		String pad =" ";
 		String padding = "";
@@ -63,11 +70,11 @@ public class JsoupParser {
 		return padding;
 	}
 	
-	public String[] urlTrimming(String url){
+	private String[] urlTrimming(String url){
 		return url.split("[.]+");
 	}
 	
-	public String[] JsoupParsing(String url) throws IOException{
+	private String[] JsoupParsing(String url) throws IOException{
 		Document doc;
 		String bodyText;
 		//get the url
@@ -80,6 +87,16 @@ public class JsoupParser {
 			
 	//replace all not text characters 
 	String[] myList = bodyText.split("[^a-zA-Z0-9']+");
+	/*
+	for(int i =0;i<myList.length;i++){
+		for(int j =0; j < myList.length;j++){
+			if(myList[i].equalsIgnoreCase(myList[j])){
+				myList[j] = "-999";
+			}
+		}
+	}
+	*/
 	return myList;
+
 	}// end JsoupParsing 
 }//end class

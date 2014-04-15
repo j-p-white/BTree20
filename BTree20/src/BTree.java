@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 //and a new change
 public class BTree implements Serializable {
@@ -8,7 +10,7 @@ public class BTree implements Serializable {
 	Node root;
 	int nodeCount;
 	Save save;
-	public BTree() throws IOException{
+	public BTree(){
 		root = new Node();
 		nodeCount = 0;
 		save = new Save();
@@ -29,6 +31,16 @@ public class BTree implements Serializable {
 			root = save.read(0);
 		}
 			insert(root, value);	
+			
+			if(root.isFull()){
+				nodeCount = nodeCount +2;
+				root.rootSplit(nodeCount);
+				for(Node n:root.getNode()){
+					save.write(n);
+				}
+				save.write(root);
+				root = save.read(0);
+			}
 			save.write(root);
 		
 	}//end public add 
@@ -115,6 +127,7 @@ public class BTree implements Serializable {
 	}
 	public Node findLink(Node node, String value) throws ClassNotFoundException, IOException{
 		int count = 0;
+		long nodeLocA=0;
 		Node temp = new Node();
 		for(String w: node.keys){
 			if(value.compareTo(w)>0){
@@ -146,7 +159,7 @@ public class BTree implements Serializable {
 	}
 	private void delete(Node node, String Val) throws ClassNotFoundException, IOException{
 		int count = 0;
-		Node temp = new Node();
+		Node badLink = new Node();
 		String predecessorVal;
 		if(node.keys.contains(Val)){ // need to fix this with find
 			if(node.isLeaf()){
@@ -187,17 +200,17 @@ public class BTree implements Serializable {
 	
 	public void newRoot() throws ClassNotFoundException, IOException{
 		Node temp ;
-		long nodeLocA = root.links.get(0);
-		temp = save.read(nodeLocA);
+		temp = save.read(root.links.get(0));
 		root.links.clear();
 		root = temp;
 	}
 	
 	public ArrayList<String> findPrefix(String Pre) throws ClassNotFoundException, IOException{
+		root = save.read(0);
 		return findPrefix(root,Pre);
 	}
 	
-	private ArrayList<String> findPrefix(Node node, String Pre) throws ClassNotFoundException, IOException{
+	private ArrayList<String> findPrefix(Node node, String pre) throws ClassNotFoundException, IOException{
 		ArrayList<String> valueList = new ArrayList<String>();
 		Node temp = new Node();
 		Node temp2 = new Node();
@@ -257,4 +270,160 @@ public class BTree implements Serializable {
 		}// end for
 		return padding;
 	}	
+	
+	//having a inifnate loop here
+	public void repair(int count,Node n,Node badLink) throws ClassNotFoundException, IOException{
+		Node neighbor = new Node();
+		Node neighborL = new Node();
+		Node neighborR = new Node();
+		
+		if( count !=0 && n.links.get(count -1) !=null){
+				neighborL = save.read(n.links.get(count -1));
+		}
+		 if(count+1 < n.links.size() && count+1 != n.links.size()){
+				neighborR = save.read(n.links.get(count+1));
+		 }
+		 
+		
+		if( neighborL.keys.size() > neighborL.middle){
+				n.rotateLeft(badLink,neighborL,count);	
+		}
+
+		else if( neighborR.keys.size() > neighbor.middle){
+				n.rotateRight(badLink,neighborR,count);
+		}
+		
+		else if(count+1 == n.links.size()){
+			    neighbor = save.read(n.links.get(count -1));
+			    n.merge(badLink, neighbor, count -1);
+		 }
+		 else{
+			 neighbor = save.read(n.links.get(count +1));
+			 n.merge(neighbor, badLink, count);
+		 }
+			    
+		
+		for(Node t: n.getNode()){
+				save.write(t);
+		}
+		save.write(n);
+	}
+	
+	
+	
+	public String predacessor(int count, Node n) throws ClassNotFoundException, IOException{
+		Node temp = save.read(n.links.get(count));
+		return goRight(temp,count+1);
+	}
+	
+	public String goRight(Node myNode,int count) throws ClassNotFoundException, IOException{
+		String toReturn;
+		if(myNode.isLeaf()){
+		toReturn = myNode.keys.remove(myNode.keys.size()-1);
+		save.write(myNode);
+		}//end if
+		else{
+			toReturn = goRight(save.read(myNode.links.get(count)),count);
+		}
+		return toReturn;
+	}
+	
+	
+	public void internalRepair(int count,Node node) throws ClassNotFoundException, IOException{
+		Node temp,temp2;
+		temp = save.read(node.links.get(count));
+		goRightRepair(node,count+1,temp);
+		for(int i = 0; i < node.links.size();i++){
+			temp2 = save.read(node.links.get(i));
+			if(temp2.minSize()){
+				repair(i,node,temp2);
+				i = 0;
+				save.write(temp2);
+			}
+		}
+	}// end internalRepair
+	
+	//will repair upto the internal node
+	public void goRightRepair(Node myNode,int count,Node parentNode) throws ClassNotFoundException, IOException{
+		if(myNode.isLeaf()){
+			return;
+		}//end if
+		else{
+			goRightRepair(save.read(myNode.links.get(count)),count,parentNode);
+			Node temp;
+			for(int i = 0; i < parentNode.links.size();i++){
+				temp = save.read(parentNode.links.get(i));
+				if(temp.minSize()){
+					repair(i,parentNode,temp);
+					i = 0;
+					save.write(temp);
+				}
+			}
+		}
+	}
+	
+	public void printTree(int count) throws IOException{
+		Node temp;
+		for(int i =0; i < count;i++){
+		temp = save.read(i); 
+		System.out.println("block number: "+temp.blockNumber);
+			for(String s:temp.keys){
+				System.out.println(s);
+			}
+			for(long l : temp.links){
+				System.out.println("blocksLinks: "+ l);
+				System.out.println("\n");
+			}
+		}
+	}
+	
+	
+	public ArrayList<String> bfs(String Pre) throws IOException
+	{
+		ArrayList<String> myList = new ArrayList<String>();
+		ArrayList<Node> nodeList = new ArrayList<Node>();
+		// BFS uses Queue data structure
+		Queue<Node> queue = new LinkedList<Node>();
+		queue.add(root);
+		root.visited = true;
+		while(!queue.isEmpty()) {
+			Node node = (Node)queue.remove();
+			for(String s : node.keys){
+				if(s.indexOf(Pre) != -1){
+					myList.add(s);
+				}
+			}
+			Node child=null;
+			for(long l: node.links){
+				nodeList.add(save.read(l));
+			}
+			for(Node n : nodeList) {
+				n.visited=true;
+				queue.add(child);
+			}
+			nodeList.clear();
+		}
+		// Clear visited property of nodes
+		clearNodes();
+		return myList;
+	}
+	private Node getUnvisitedChildNode(Node node) throws IOException{
+		Node toReturn = null;
+		for(int i =0; i < node.links.size();i++){
+			Node temp = save.read(node.links.get(i));
+			if(temp.visited == false){
+				toReturn = temp;
+				break;
+			}
+		}
+		return toReturn;
+	}
+	private void clearNodes() throws IOException{
+		Node temp;
+		for(int i =0; i < nodeCount;i++){
+			temp = save.read(i);
+			temp.visited = false;
+		}
+	}
+	
 }//end class

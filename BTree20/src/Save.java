@@ -6,13 +6,19 @@ import java.nio.ByteBuffer;
 public class Save {
 	
 	byte[] getBytes;
-	final int STRINGLENGTH = 34;
-	final int OFFSETBYTELENGTH = 8;
-	final int STARTLINKBYTES = 102;
-	final int NODEBLOCKLOCATIONPOS = 134;
-	final int NUMBLINKBYTES = 32;
-	final int TOTALNODESIZE = 142;
+	final int NUMBKEY = 3; 
+	
+	final int NUMBLINKS = NUMBKEY +1;
+	final int STRINGLENGTH = 34; // the length of each string
+	final int OFFSETBYTELENGTH = 8; // length of each long
+	
+	final int STARTLINKBYTES = STRINGLENGTH * NUMBKEY; // where we start reading links
+	final int NODEBLOCKLOCATIONPOS = STARTLINKBYTES +(OFFSETBYTELENGTH * NUMBLINKS); // where the nodes block number is - 8 links and 7 words
+	final int NUMBLINKBYTES = OFFSETBYTELENGTH * NUMBLINKS; // the number of links in bytes - 8 longs worth
+	final int TOTALNODESIZE = NODEBLOCKLOCATIONPOS +OFFSETBYTELENGTH; // total size of the node 
+	
 	Flarf saveFile = new Flarf(TOTALNODESIZE,"Btree.dat");
+	
 	public Save() throws FileNotFoundException{
 		 
 	}
@@ -30,9 +36,8 @@ public class Save {
 	private byte[] packNode(Node n){
 		byte [] nodeBytes = new byte [TOTALNODESIZE];
 		byte [] nodeLinkBytes = new byte [NUMBLINKBYTES];
-	//	byte [] nodeLoc = new byte[8];
 		int count = 0;
-		byte [] temp; 
+		byte [] temp;  
 		for(String k:n.keys){
 			if(k.length() < STRINGLENGTH){
 			 String p = getWordPadding(k.length());
@@ -57,7 +62,6 @@ public class Save {
 				}
 			}
 		}
-		
 		 int x = 0;
 		for(long l: n.links){
 			temp =toByte(l);
@@ -72,19 +76,18 @@ public class Save {
 			for( int i =0 ; i < diff;i++){
 				temp = toByte(badLong);
 				for( int k =0; k< temp.length;k++){
-					nodeLinkBytes[x] = temp[k];
-					x++;
+						nodeLinkBytes[x] = temp[k];
+				x++;
 				}//end adding bytes
 			}// end diffrence
 		}// end if not enough links
-		
-		temp = toByte(n.blockNumber);
 		
 		for(int z = 0; z< nodeLinkBytes.length;z++){
 			nodeBytes[count] = nodeLinkBytes[z];
 			count++;
 		}// end adding links to nodeBytes
 		
+		temp = toByte(n.blockNumber);
 		for(byte b : temp){
 			nodeBytes[count] = b;
 			count++;
