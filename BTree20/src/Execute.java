@@ -17,6 +17,7 @@ public class Execute{
 	     
 	     System.out.println("enter int findCharecters: " );
 	     String val = scan.next();
+	     scan.close();
 	     foundWords = t.bfs(val);
 	     System.out.println("found words: "+ foundWords);
 	     

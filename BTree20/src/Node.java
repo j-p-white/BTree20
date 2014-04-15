@@ -45,8 +45,8 @@ public class Node implements Serializable{
 			right.keys.add(link.keys.remove(middle+1));	
 		}
 		if(!link.isLeaf()){
-			while(link.links.size()>middle +1){
-				right.links.add(link.links.remove(middle));
+			while(link.links.size()>middle+1){
+				right.links.add(link.links.remove(middle+1));
 			}
 		}
 		//get the middle value
