@@ -131,7 +131,6 @@ public class BTree implements Serializable {
 	}
 	public Node findLink(Node node, String value) throws ClassNotFoundException, IOException{
 		int count = 0;
-		long nodeLocA=0;
 		Node temp = new Node();
 		for(String w: node.keys){
 			String[] s = w.split("\\s+");
@@ -142,21 +141,32 @@ public class BTree implements Serializable {
 				break;
 			}//end else
 		}// end for
-			nodeLocA = node.links.get(count);
+		try{
+			temp = save.read(node.links.get(count));
+		}
+		catch(IndexOutOfBoundsException e){
+			System.out.println("nodesNumbs: "+ node.blockNumber);
+			System.out.println("nodesKeys: "+ node.keys.size());
+			System.out.println("nodesLinks: "+ node.links.size());
+			e.printStackTrace();
+		}
 		save.write(node);
-			temp = save.read(nodeLocA);
 			return temp;
 	}//end find value
 
 	public void delete(String value) throws ClassNotFoundException, IOException{
 		root = save.read(0);
 	  if(search(value)){
-		  String p = getWordPadding(value.length());
-		  value = value + p;
+		  if(value.length() < 34){
+			  String p = getWordPadding(value.length());
+			  value = value + p;
+		  }
 		  delete(root,value);
 		  if(root.keys.size() == 0){
-		  // reset root
-			  newRoot();
+				Node temp ;
+				temp = save.read(root.links.get(0));
+				temp.blockNumber = 0;
+				save.write(temp);
 		  }
 	  }
 	  else {
@@ -274,12 +284,14 @@ public class BTree implements Serializable {
 	
 	public String goRight(Node myNode,int count) throws ClassNotFoundException, IOException{
 		String toReturn;
+		Node temp;
 		if(myNode.isLeaf()){
 		toReturn = myNode.keys.remove(myNode.keys.size()-1);
 		save.write(myNode);
 		}//end if
 		else{
-			toReturn = goRight(save.read(myNode.links.get(count)),count);
+			temp =save.read(myNode.links.get(count));
+			toReturn = goRight(temp,count);
 		}
 		return toReturn;
 	}

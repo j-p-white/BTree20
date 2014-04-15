@@ -100,6 +100,7 @@ public class Test {
 		BTree tree = new BTree();	
 		String padding,fixedString;
 		ArrayList<String> testWords = new ArrayList<String>();
+		ArrayList<String> foundWords = new ArrayList<String>();
 		testWords.add("apple");
 		testWords.add("sand");
 		testWords.add("math");
@@ -128,7 +129,15 @@ public class Test {
 			tree.insert(fixedString);
 		}
 		System.out.println(tree.bfs("n"));
+		foundWords = tree.bfs("n");
+		for(String s : foundWords){
+			tree.delete(s);
+		}
+		
 	}//end prefex test
+	
+	
+	
 	private static String getPadding(int wordLength){
 		int diffrence;
 		String pad =" ";
