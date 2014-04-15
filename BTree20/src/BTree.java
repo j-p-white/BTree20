@@ -13,9 +13,14 @@ public class BTree implements Serializable {
 	public BTree(){
 		root = new Node();
 		nodeCount = 0;
+		try{
 		save = new Save();
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
 	}// end BTree
-	
+	// some how more links are being made then should be. 
 	public void insert(String value) throws IOException, ClassNotFoundException{
 		if(root.keys.size() >0){
 			root = save.read(0);
@@ -96,7 +101,6 @@ public class BTree implements Serializable {
 			}//end for
 		}// end else
 	}//end private insert
-	
 	public boolean search(String val) throws ClassNotFoundException, IOException{
 		boolean result = true;
 		if(root.keys.contains(val)){
@@ -130,14 +134,16 @@ public class BTree implements Serializable {
 		long nodeLocA=0;
 		Node temp = new Node();
 		for(String w: node.keys){
-			if(value.compareTo(w)>0){
+			String[] s = w.split("\\s+");
+			if(value.compareTo(s[0])>0){
 				count++;
 			}//end if
 			else{
 				break;
 			}//end else
 		}// end for
-		long nodeLocA = node.links.get(count);
+			nodeLocA = node.links.get(count);
+		save.write(node);
 			temp = save.read(nodeLocA);
 			return temp;
 	}//end find value
@@ -175,18 +181,19 @@ public class BTree implements Serializable {
 					}
 						count++;
 				}// end for
-				predecessorVal = node.predacessor(count);
+				predecessorVal = predacessor(count,node);
 				node.keys.set(count, predecessorVal); 
-				node.internalRepair(count);
+				internalRepair(count,node);
+				save.write(node);
 			}//end else
 		}
 		else{
 			delete(findLink(node,Val),Val);
 			for(int i =0; i < node.links.size();i++){
 				long nodeLocA = node.links.get(i);
-				temp = save.read(nodeLocA);
-				if(temp.minSize()){
-					node.repair(i);
+				badLink = save.read(nodeLocA);
+				if(badLink.minSize()){
+					repair(i,node,badLink);
 					i = 0;
 				}// end if
 			}//end for
@@ -203,59 +210,8 @@ public class BTree implements Serializable {
 		temp = save.read(root.links.get(0));
 		root.links.clear();
 		root = temp;
-	}
-	
-	public ArrayList<String> findPrefix(String Pre) throws ClassNotFoundException, IOException{
-		root = save.read(0);
-		return findPrefix(root,Pre);
-	}
-	
-	private ArrayList<String> findPrefix(Node node, String pre) throws ClassNotFoundException, IOException{
-		ArrayList<String> valueList = new ArrayList<String>();
-		Node temp = new Node();
-		Node temp2 = new Node();
-		for(int i = 0; i < node.keys.size();i++){
-			if(node.keys.get(i).startsWith(Pre)||node.keys.get(i).compareTo(Pre)>0){
-				long nodeLocA = node.links.get(i);
-				long nodeLocB = node.links.get(i+1);
-				temp = save.read(nodeLocA);
-				temp2 = save.read(nodeLocB);
-				if(!node.isLeaf()){
-					checkLists(valueList,findPrefix(temp,Pre));
-					//if(node.links.get(i +1)!= null){
-					// valueList.addAll(findPrefix(node.links.get(i+1),Pre));
-					//}
-				}
-				if(!node.isLeaf() && node.links.get(i +1)!= null){
-					checkLists(valueList,findPrefix(temp2,Pre));
-				}
-				if(node.keys.get(i).startsWith(Pre)){
-					if(!valueList.contains(node.keys.get(i))){
-						valueList.add(node.keys.get(i));
-					}
-				}// end three if's
-				
-			}// end big if 
-			else if(i == node.keys.size()-1){
-				if(!node.isLeaf() && node.links.get(i+1)!=null){ // Potently issue
-					valueList.addAll(findPrefix(temp2,Pre));
-				}//end one last check if 
-			}// end end-of-rope else
-		}// end for
-		return valueList;
-	}// end findPrefix
-	
-	private void checkLists(ArrayList<String>valueList,ArrayList<String> tempList){
-		for(String s:tempList){
-			if(valueList.contains(s)){
-				//dont add it 
-			}
-			else{
-				valueList.add(s);
-			}
-		}// end for
-	}//end checkList
-	
+		save.write(root);
+	}	
 	public int getNodeCount(){
 		return nodeCount;
 	}//end nodeCount
@@ -381,49 +337,22 @@ public class BTree implements Serializable {
 	public ArrayList<String> bfs(String Pre) throws IOException
 	{
 		ArrayList<String> myList = new ArrayList<String>();
-		ArrayList<Node> nodeList = new ArrayList<Node>();
-		// BFS uses Queue data structure
 		Queue<Node> queue = new LinkedList<Node>();
 		queue.add(root);
-		root.visited = true;
 		while(!queue.isEmpty()) {
 			Node node = (Node)queue.remove();
 			for(String s : node.keys){
-				if(s.indexOf(Pre) != -1){
+				String[] v = s.split("\\s+");
+				if(v[0].indexOf(Pre) != -1){
 					myList.add(s);
 				}
 			}
-			Node child=null;
 			for(long l: node.links){
-				nodeList.add(save.read(l));
+				queue.add(save.read(l));
 			}
-			for(Node n : nodeList) {
-				n.visited=true;
-				queue.add(child);
-			}
-			nodeList.clear();
+			//nodeList.clear();
 		}
 		// Clear visited property of nodes
-		clearNodes();
 		return myList;
 	}
-	private Node getUnvisitedChildNode(Node node) throws IOException{
-		Node toReturn = null;
-		for(int i =0; i < node.links.size();i++){
-			Node temp = save.read(node.links.get(i));
-			if(temp.visited == false){
-				toReturn = temp;
-				break;
-			}
-		}
-		return toReturn;
-	}
-	private void clearNodes() throws IOException{
-		Node temp;
-		for(int i =0; i < nodeCount;i++){
-			temp = save.read(i);
-			temp.visited = false;
-		}
-	}
-	
 }//end class

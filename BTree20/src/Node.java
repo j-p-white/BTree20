@@ -12,6 +12,7 @@ public class Node implements Serializable{
 	long blockNumber;
 	boolean visited = false;
 	BTree tree;
+	
 	public Node(){
 
 	}
@@ -45,7 +46,7 @@ public class Node implements Serializable{
 		}
 		if(!link.isLeaf()){
 			while(link.links.size()>middle +1){
-				right.links.add(link.links.remove(middle+1));
+				right.links.add(link.links.remove(middle));
 			}
 		}
 		//get the middle value
@@ -126,57 +127,8 @@ public class Node implements Serializable{
 	}
 	
 	
-	// use git hub repair 
+	
 	// need to get the link before i remove the key---error
-	public void rotateLeft(Node deficient, Node overfull,int count) throws ClassNotFoundException, IOException{
-		String parentKey;
-		String replaceKey;
-		Node temp;
-		Node temp2;
-		long nodeLocA = links.get(count -1);
-		long nodeLocB = links.get(count);
-		int apple =tree.save.read(nodeLocA).keys.size()-1;
-		
-		//get the link to the deficient right node
-		temp2 = tree.save.read(nodeLocA);
-		temp = tree.save.read(nodeLocB);
-		
-		// the parent key
-		parentKey = keys.remove(count -1 );
-		// parent key is placed in deficient right node brining it to minimum
-		temp.keys.add(0,parentKey);
-		// get the key from the over full left node
-		replaceKey = temp2.keys.remove(apple);
-		
-		//put the new key in the proper spot.
-		keys.add(count -1,replaceKey);
-		
-		//write node back to file
-		tree.save.write(temp);
-		tree.save.write(temp2);
-	}
-	public void rotateLeft(Node deficient, Node overfull,int count) throws ClassNotFoundException, IOException{
-		String parentKey;
-		String replaceKey;
-		int apple =overfull.keys.size()-1;
-		
-		//get the link to the deficient right node
-		
-		// the parent key
-		parentKey = keys.remove(count -1 );
-		// parent key is placed in deficient right node brining it to minimum
-		deficient.keys.add(0,parentKey);
-		// get the key from the over full left node
-		replaceKey = overfull.keys.remove(apple);
-		
-		//put the new key in the proper spot.
-		keys.add(count -1,replaceKey);
-		
-		//write node back to file
-		temp.clear();
-		temp.add(overfull);
-		temp.add(deficient);
-	}
 	public void rotateLeft(Node deficient, Node overfull,int count) throws ClassNotFoundException, IOException{
 		String parentKey;
 		String replaceKey;
@@ -203,44 +155,36 @@ public class Node implements Serializable{
 	public void rotateRight(Node dificent,Node overfull, int count) throws ClassNotFoundException, IOException{
 		String parentKey;
 		String replaceKey;
-		long nodeLocA = links.get(count); 
-		long nodeLocB = links.get(count+1);
-		Node temp = tree.save.read(nodeLocA);
-		Node temp2 = tree.save.read(nodeLocB);
+
 		//the parent key
 		parentKey = keys.remove(count);
 		//parent key is placed in deficient left node brining it to minimum
-		temp.keys.add(parentKey);
+		dificent.keys.add(parentKey);
 		//get the key from the over full right node
-		replaceKey = temp2.keys.remove(0);
+		replaceKey = overfull.keys.remove(0);
 		//put the new key in the proper spot 
 		keys.add(count,replaceKey);
 		
 		//write node back to file
-		tree.save.write(temp);
-		tree.save.write(temp2);
+		temp.clear();
+		temp.add(dificent);
+		temp.add(overfull);
 	}
 	
 	public void merge(Node rightLink,Node leftLink, int count) throws ClassNotFoundException, IOException{
 		String parentKey;
-		Node temp,temp2;
-		long nodeLocA = links.get(count+1);
-		long nodeLocB = links.get(count);
 		
-		temp = tree.save.read(nodeLocA);
-		temp2 = tree.save.read(nodeLocB);
-		//get the parentKey
 		parentKey = keys.remove(count);
 		
-		//put parentKey into right link 
-		temp.keys.add(0,parentKey);
-			// put left values into right values
-		for(String s: temp2.keys) {
-			temp.keys.add(0,s);
+		rightLink.keys.add(0,parentKey);
+		
+		// put left values into right values
+		for(String s: leftLink.keys) {
+			rightLink.keys.add(0,s);
 		}// end for
-			//left links go into rights links
-		for(long Link: temp2.links){
-				temp.links.add(0,Link);
+		//left links go into rights links
+		for(long Link: leftLink.links){
+				rightLink.links.add(0,Link);
 		}// end for
 		
 		links.remove(count);
@@ -248,9 +192,6 @@ public class Node implements Serializable{
 		temp.add(rightLink);
 	}// end merge
 	
-
-	
-
 	public boolean minSize(){
 		boolean result; 
 		if(keys.size() < MAXKEYS/2){
