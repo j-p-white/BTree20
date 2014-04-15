@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 //and a new change
 public class BTree implements Serializable {
@@ -23,12 +25,7 @@ public class BTree implements Serializable {
 		if(root.keys.size() >0){
 			root = save.read(0);
 		}
-		String[] s = value.split("\\s+");
-		if(search(s[0])){
 			
-		}
-		else{
-		
 		if(root.isFull()){
 			nodeCount = nodeCount +2;
 			root.rootSplit(nodeCount);
@@ -50,18 +47,17 @@ public class BTree implements Serializable {
 				root = save.read(0);
 			}
 			save.write(root);
-		}
+		
 	}//end public add 
 	
 	private void insert(Node node,String val) throws IOException, ClassNotFoundException{
 		int count= 0;
 		Node temp = new Node();
 		Node looking = new Node();
-		String[] s = val.split("\\s+");
 		if(node.isLeaf())
 		{
-			for(String word: node.keys){
-				if(s[0].compareTo(word)>0){
+			for(String letter: node.keys){
+				if(val.compareTo(letter)>0){
 					count++;
 				}
 				else{
@@ -87,7 +83,7 @@ public class BTree implements Serializable {
 						i = 0;
 					}//end if
 				}//end for
-			temp = findLink(node,s[0]);
+			temp = findLink(node,val);
 			insert(temp,val);
 			
 			for(int i =0;i < node.links.size();i++){
@@ -99,14 +95,12 @@ public class BTree implements Serializable {
 					for(Node n: node.getNode()){
 						save.write(n);
 					}
-					printTree(nodeCount);
 					save.write(node);
 					i = 0;
 				}//end if
 			}//end for
 		}// end else
 	}//end private insert
-	
 	public boolean search(String val) throws ClassNotFoundException, IOException{
 		boolean result = true;
 		if(root.keys.contains(val)){
@@ -137,6 +131,7 @@ public class BTree implements Serializable {
 	}
 	public Node findLink(Node node, String value) throws ClassNotFoundException, IOException{
 		int count = 0;
+		long nodeLocA=0;
 		Node temp = new Node();
 		for(String w: node.keys){
 			String[] s = w.split("\\s+");
@@ -147,7 +142,7 @@ public class BTree implements Serializable {
 				break;
 			}//end else
 		}// end for
-		long nodeLocA = node.links.get(count);
+			nodeLocA = node.links.get(count);
 		save.write(node);
 			temp = save.read(nodeLocA);
 			return temp;
@@ -397,6 +392,52 @@ public class BTree implements Serializable {
 	}
 	
 	
-	
+	public ArrayList<String> bfs(String Pre) throws IOException
+	{
+		ArrayList<String> myList = new ArrayList<String>();
+		ArrayList<Node> nodeList = new ArrayList<Node>();
+		// BFS uses Queue data structure
+		Queue<Node> queue = new LinkedList<Node>();
+		queue.add(root);
+		root.visited = true;
+		while(!queue.isEmpty()) {
+			Node node = (Node)queue.remove();
+			for(String s : node.keys){
+				if(s.indexOf(Pre) != -1){
+					myList.add(s);
+				}
+			}
+			Node child=null;
+			for(long l: node.links){
+				nodeList.add(save.read(l));
+			}
+			for(Node n : nodeList) {
+				n.visited=true;
+				queue.add(child);
+			}
+			nodeList.clear();
+		}
+		// Clear visited property of nodes
+		clearNodes();
+		return myList;
+	}
+	private Node getUnvisitedChildNode(Node node) throws IOException{
+		Node toReturn = null;
+		for(int i =0; i < node.links.size();i++){
+			Node temp = save.read(node.links.get(i));
+			if(temp.visited == false){
+				toReturn = temp;
+				break;
+			}
+		}
+		return toReturn;
+	}
+	private void clearNodes() throws IOException{
+		Node temp;
+		for(int i =0; i < nodeCount;i++){
+			temp = save.read(i);
+			temp.visited = false;
+		}
+	}
 	
 }//end class

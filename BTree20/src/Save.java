@@ -6,12 +6,17 @@ import java.nio.ByteBuffer;
 public class Save {
 	
 	byte[] getBytes;
+	final int NUMBKEY = 3; 
+	
+	final int NUMBLINKS = NUMBKEY +1;
 	final int STRINGLENGTH = 34; // the length of each string
 	final int OFFSETBYTELENGTH = 8; // length of each long
-	final int STARTLINKBYTES = 1054; // where the links start
-	final int NODEBLOCKLOCATIONPOS = 1310; // where the nodes block number is
-	final int NUMBLINKBYTES = 256; // the number of links in bytes
-	final int TOTALNODESIZE = 1318; // total size of the node
+	
+	final int STARTLINKBYTES = STRINGLENGTH * NUMBKEY; // where we start reading links
+	final int NODEBLOCKLOCATIONPOS = STARTLINKBYTES +(OFFSETBYTELENGTH * NUMBLINKS); // where the nodes block number is - 8 links and 7 words
+	final int NUMBLINKBYTES = OFFSETBYTELENGTH * NUMBLINKS; // the number of links in bytes - 8 longs worth
+	final int TOTALNODESIZE = NODEBLOCKLOCATIONPOS +OFFSETBYTELENGTH; // total size of the node 
+	
 	Flarf saveFile = new Flarf(TOTALNODESIZE,"Btree.dat");
 	
 	public Save() throws FileNotFoundException{
@@ -32,7 +37,7 @@ public class Save {
 		byte [] nodeBytes = new byte [TOTALNODESIZE];
 		byte [] nodeLinkBytes = new byte [NUMBLINKBYTES];
 		int count = 0;
-		byte [] temp; 
+		byte [] temp;  
 		for(String k:n.keys){
 			if(k.length() < STRINGLENGTH){
 			 String p = getWordPadding(k.length());
@@ -71,19 +76,18 @@ public class Save {
 			for( int i =0 ; i < diff;i++){
 				temp = toByte(badLong);
 				for( int k =0; k< temp.length;k++){
-					nodeLinkBytes[x] = temp[k];
-					x++;
+						nodeLinkBytes[x] = temp[k];
+				x++;
 				}//end adding bytes
 			}// end diffrence
 		}// end if not enough links
-		
-		temp = toByte(n.blockNumber);
 		
 		for(int z = 0; z< nodeLinkBytes.length;z++){
 			nodeBytes[count] = nodeLinkBytes[z];
 			count++;
 		}// end adding links to nodeBytes
 		
+		temp = toByte(n.blockNumber);
 		for(byte b : temp){
 			nodeBytes[count] = b;
 			count++;

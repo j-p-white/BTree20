@@ -5,11 +5,12 @@ import java.util.ArrayList;
 public class Node implements Serializable{
 	private static final long serialVersionUID = 1L;
 	ArrayList<Node> temp = new ArrayList<Node>();
-	final int MAXKEYS = 31; //3 is test 
+	final int MAXKEYS = 3; //7 is test 
 	final int middle = MAXKEYS/2;
 	ArrayList<String> keys = new ArrayList<String>(); 
 	ArrayList<Long> links = new ArrayList<Long>();
 	long blockNumber;
+	boolean visited = false;
 	BTree tree;
 	
 	public Node(){
@@ -42,6 +43,11 @@ public class Node implements Serializable{
 		//get right
 		while(link.keys.size()> middle+1){
 			right.keys.add(link.keys.remove(middle+1));	
+		}
+		if(!link.isLeaf()){
+			while(link.links.size()>middle +1){
+				right.links.add(link.links.remove(middle+1));
+			}
 		}
 		//get the middle value
 		middleVal= link.keys.remove(link.keys.size()-1);
@@ -87,7 +93,7 @@ public class Node implements Serializable{
 		Node left = new Node(); 
 		//get all the left keys
 		for(int i =0; i < mid;i++){
-			left.keys.add(keys.remove(i));
+			left.keys.add(keys.remove(0));
 		}//end for
 		return left;
 	}// end makeNewLeft
@@ -110,17 +116,12 @@ public class Node implements Serializable{
 	
 	private void addRightLinks(Node right){
 			right.links.addAll(links);
-		/*	
-			if(right.links.get(0) > right.links.get(1)){
-				long temp = right.links.remove(0);
-				right.links.add(temp);
-			}
-		*/
 			links.clear();
 	}//end add right links
 	
 	// this needs to take in the incrament size
 	private void hookLinks(long offleft,long offright){
+		links.clear();
 		links.add(offleft);
 		links.add(offright);
 	}

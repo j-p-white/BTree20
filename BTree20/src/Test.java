@@ -16,17 +16,24 @@ public class Test {
 		testWords.add("apple");
 		testWords.add("sand");
 		testWords.add("math");
-		
 		testWords.add("tree");
 		testWords.add("north");
 		testWords.add("onion");
-		
 		testWords.add("pan");
 		testWords.add("pink");
 		testWords.add("pool");
-		
 		testWords.add("net");
 		testWords.add("never");
+		testWords.add("vincent");
+		testWords.add("von"); 
+		testWords.add("strudle"); 
+		testWords.add("pahntom");
+		testWords.add("newEarth");
+		testWords.add("nova");
+		testWords.add("nest");
+		testWords.add("newEngland"); 
+		testWords.add("newYork"); 
+		testWords.add("newguni");
 		
 		
 		for(String k : testWords){
@@ -34,7 +41,6 @@ public class Test {
 			fixedString = k + padding;
 			tree.insert(fixedString);
 		}
-		
 		for(int i =0; i < testWords.size();i++){
 		temp = tree.save.read(i); 
 		System.out.println("block number: "+temp.blockNumber);
@@ -97,25 +103,31 @@ public class Test {
 		testWords.add("apple");
 		testWords.add("sand");
 		testWords.add("math");
-		
 		testWords.add("tree");
 		testWords.add("north");
 		testWords.add("onion");
-		
 		testWords.add("pan");
 		testWords.add("pink");
 		testWords.add("pool");
-		
 		testWords.add("net");
 		testWords.add("never");
-		
+		testWords.add("vincent");
+		testWords.add("von"); 
+		testWords.add("strudle"); 
+		testWords.add("pahntom");
+		testWords.add("newEarth");
+		testWords.add("nova");
+		testWords.add("nest");
+		testWords.add("newEngland"); 
+		testWords.add("newYork"); 
+		testWords.add("newguni");
 		
 		for(String k : testWords){
 			padding = getPadding(k.length());
 			fixedString = k + padding;
 			tree.insert(fixedString);
 		}
-		System.out.println(tree.findPrefix("n"));
+		System.out.println(tree.bfs("n"));
 	}//end prefex test
 	private static String getPadding(int wordLength){
 		int diffrence;
