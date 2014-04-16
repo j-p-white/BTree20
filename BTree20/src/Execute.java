@@ -2,12 +2,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-
-
-
 public class Execute
 {
-
 	public static void main(String [] args) throws ClassNotFoundException, IOException{
 		Scanner scan = new Scanner(System.in);
 		ArrayList<String> foundWords;
@@ -24,8 +20,5 @@ public class Execute
 	     for(String s : foundWords){
 	    	 t.delete(s);
 	     }
-	     
-	     
 	}
-	
 }

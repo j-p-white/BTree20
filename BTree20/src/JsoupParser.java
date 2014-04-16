@@ -25,6 +25,7 @@ public class JsoupParser {
 	public void readInFile() throws ClassNotFoundException{
 		Scanner scan;
 		String url;
+		int count =0;
 		String paddedWord = null;
 		File BTreeFile = new File("BTreeURL.txt");
 		String[] fileWords;
@@ -42,11 +43,12 @@ public class JsoupParser {
 						}
 						else if(words.length() < 34){
 							paddedWord = hookStrings(words,trimmedUrl) + getPadding(hookStrings(words,trimmedUrl).length());
+							count++;
 							tree.insert(paddedWord);
 						}// end wordsIf	
-							
 					}//end for
 				}//end scanner while
+				System.out.println(count);
 			scan.close();			
 		}//end try
 		catch(IOException e){
@@ -89,13 +91,12 @@ public class JsoupParser {
 	String[] myList = bodyText.split("[^a-zA-Z0-9']+");
 	
 	for(int i =0;i<myList.length;i++){
-		for(int j =0; j < myList.length;j++){
+		for(int j =i+1; j < myList.length;j++){
 			if(myList[i].equalsIgnoreCase(myList[j])){
 				myList[j] = "-999";
 			}
 		}
 	}
 	return myList;
-
 	}// end JsoupParsing 
 }//end class
