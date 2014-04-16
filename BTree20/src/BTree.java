@@ -133,45 +133,35 @@ public class BTree implements Serializable {
 		int count = 0;
 		Node temp = new Node();
 		for(String w: node.keys){
-			String[] s = w.split("\\s+");
-			if(value.compareTo(s[0])>0){
+			if(value.compareTo(w)>0){
 				count++;
 			}//end if
 			else{
 				break;
 			}//end else
 		}// end for
-		try{
 			temp = save.read(node.links.get(count));
-		}
-		catch(IndexOutOfBoundsException e){
-			System.out.println("nodesNumbs: "+ node.blockNumber);
-			System.out.println("nodesKeys: "+ node.keys.size());
-			System.out.println("nodesLinks: "+ node.links.size());
-			e.printStackTrace();
-		}
 		save.write(node);
 			return temp;
 	}//end find value
 
 	public void delete(String value) throws ClassNotFoundException, IOException{
 		root = save.read(0);
-	  if(search(value)){
+	  
 		  if(value.length() < 34){
 			  String p = getWordPadding(value.length());
 			  value = value + p;
 		  }
 		  delete(root,value);
-		  if(root.keys.size() == 0){
+		  if(root.keys.size() == 0 && root.links.size() ==0){
+			  System.out.println("deadTree");
+		  }
+		  else if(root.keys.size() == 0){
 				Node temp ;
 				temp = save.read(root.links.get(0));
 				temp.blockNumber = 0;
 				save.write(temp);
 		  }
-	  }
-	  else {
-		  System.out.println("this value is not real");
-	  }	
 	}
 	private void delete(Node node, String Val) throws ClassNotFoundException, IOException{
 		int count = 0;
@@ -300,7 +290,7 @@ public class BTree implements Serializable {
 	public void internalRepair(int count,Node node) throws ClassNotFoundException, IOException{
 		Node temp,temp2;
 		temp = save.read(node.links.get(count));
-		goRightRepair(node,count+1,temp);
+		goRightRepair(temp,count+1);// why is parent in there
 		for(int i = 0; i < node.links.size();i++){
 			temp2 = save.read(node.links.get(i));
 			if(temp2.minSize()){
@@ -312,17 +302,17 @@ public class BTree implements Serializable {
 	}// end internalRepair
 	
 	//will repair upto the internal node
-	public void goRightRepair(Node myNode,int count,Node parentNode) throws ClassNotFoundException, IOException{
+	public void goRightRepair(Node myNode,int count) throws ClassNotFoundException, IOException{
 		if(myNode.isLeaf()){
 			return;
 		}//end if
 		else{
-			goRightRepair(save.read(myNode.links.get(count)),count,parentNode);
+			goRightRepair(save.read(myNode.links.get(count)),count);
 			Node temp;
-			for(int i = 0; i < parentNode.links.size();i++){
-				temp = save.read(parentNode.links.get(i));
+			for(int i = 0; i < myNode.links.size();i++){
+				temp = save.read(myNode.links.get(i));
 				if(temp.minSize()){
-					repair(i,parentNode,temp);
+					repair(i,myNode,temp);
 					i = 0;
 					save.write(temp);
 				}

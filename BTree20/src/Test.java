@@ -41,6 +41,7 @@ public class Test {
 			fixedString = k + padding;
 			tree.insert(fixedString);
 		}
+		
 		for(int i =0; i < testWords.size();i++){
 		temp = tree.save.read(i); 
 		System.out.println("block number: "+temp.blockNumber);
@@ -99,6 +100,7 @@ public class Test {
 	public static void testPrefexFind() throws IOException, ClassNotFoundException{
 		BTree tree = new BTree();	
 		String padding,fixedString;
+		Node temp = new Node();
 		ArrayList<String> testWords = new ArrayList<String>();
 		ArrayList<String> foundWords = new ArrayList<String>();
 		testWords.add("apple");
@@ -129,9 +131,30 @@ public class Test {
 			tree.insert(fixedString);
 		}
 		System.out.println(tree.bfs("n"));
-		foundWords = tree.bfs("n");
-		for(String s : foundWords){
+		foundWords = tree.bfs("n");	
+	/*	
+		for(String s: foundWords){
+			System.out.println(s);
 			tree.delete(s);
+		}
+	*/
+		tree.delete("onion");
+		tree.delete("never");
+		tree.delete("sand");
+		tree.delete("newEngland");
+	//	tree.delete("north");
+
+		
+		for(int i =0; i < testWords.size();i++){
+		temp = tree.save.read(i); 
+		System.out.println("block number: "+temp.blockNumber);
+			for(String s:temp.keys){
+				System.out.println(s);
+			}
+			for(long l : temp.links){
+				System.out.println("blocksLinks: "+ l);
+				System.out.println("\n");
+			}
 		}
 		
 	}//end prefex test
