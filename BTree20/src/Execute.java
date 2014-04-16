@@ -5,9 +5,9 @@ import java.util.Scanner;
 
 
 
-public class Execute{
+public class Execute
+{
 
-/*
 	public static void main(String [] args) throws ClassNotFoundException, IOException{
 		Scanner scan = new Scanner(System.in);
 		ArrayList<String> foundWords;
@@ -27,5 +27,5 @@ public class Execute{
 	     
 	     
 	}
-	*/
+	
 }

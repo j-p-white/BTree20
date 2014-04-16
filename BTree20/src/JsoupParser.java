@@ -87,7 +87,7 @@ public class JsoupParser {
 			
 	//replace all not text characters 
 	String[] myList = bodyText.split("[^a-zA-Z0-9']+");
-	/*
+	
 	for(int i =0;i<myList.length;i++){
 		for(int j =0; j < myList.length;j++){
 			if(myList[i].equalsIgnoreCase(myList[j])){
@@ -95,7 +95,6 @@ public class JsoupParser {
 			}
 		}
 	}
-	*/
 	return myList;
 
 	}// end JsoupParsing 

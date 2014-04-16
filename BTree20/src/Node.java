@@ -142,6 +142,9 @@ public class Node implements Serializable{
 		deficient.keys.add(0,parentKey);
 		// get the key from the over full left node
 		replaceKey = overfull.keys.remove(apple);
+		if(!overfull.isLeaf()){
+			deficient.links.add(0,overfull.links.remove(overfull.links.size()-1));
+		}
 		
 		//put the new key in the proper spot.
 		keys.add(count -1,replaceKey);
@@ -162,6 +165,9 @@ public class Node implements Serializable{
 		dificent.keys.add(parentKey);
 		//get the key from the over full right node
 		replaceKey = overfull.keys.remove(0);
+		if(!overfull.isLeaf()){
+			dificent.links.add(overfull.links.remove(0));
+		}
 		//put the new key in the proper spot 
 		keys.add(count,replaceKey);
 		
@@ -183,8 +189,8 @@ public class Node implements Serializable{
 			rightLink.keys.add(0,s);
 		}// end for
 		//left links go into rights links
-		for(long Link: leftLink.links){
-				rightLink.links.add(0,Link);
+		for(int i = leftLink.links.size(); i > 0;i--){
+				rightLink.links.add(0,leftLink.links.get(i -1));
 		}// end for
 		
 		links.remove(count);

@@ -176,7 +176,7 @@ public class BTree implements Serializable {
 			else{
 				//find the key value
 				for(String s:node.keys){
-					if(s.equalsIgnoreCase(s)){
+					if(s.equalsIgnoreCase(Val)){
 						break;
 					}
 						count++;
@@ -269,10 +269,10 @@ public class BTree implements Serializable {
 	
 	public String predacessor(int count, Node n) throws ClassNotFoundException, IOException{
 		Node temp = save.read(n.links.get(count));
-		return goRight(temp,count+1);
+		return goRight(temp);
 	}
 	
-	public String goRight(Node myNode,int count) throws ClassNotFoundException, IOException{
+	public String goRight(Node myNode) throws ClassNotFoundException, IOException{
 		String toReturn;
 		Node temp;
 		if(myNode.isLeaf()){
@@ -280,8 +280,8 @@ public class BTree implements Serializable {
 		save.write(myNode);
 		}//end if
 		else{
-			temp =save.read(myNode.links.get(count));
-			toReturn = goRight(temp,count);
+			temp =save.read(myNode.links.get(myNode.links.size() -1));
+			toReturn = goRight(temp);
 		}
 		return toReturn;
 	}
@@ -290,7 +290,7 @@ public class BTree implements Serializable {
 	public void internalRepair(int count,Node node) throws ClassNotFoundException, IOException{
 		Node temp,temp2;
 		temp = save.read(node.links.get(count));
-		goRightRepair(temp,count+1);// why is parent in there
+		goRightRepair(temp);// why is parent in there
 		for(int i = 0; i < node.links.size();i++){
 			temp2 = save.read(node.links.get(i));
 			if(temp2.minSize()){
@@ -302,12 +302,12 @@ public class BTree implements Serializable {
 	}// end internalRepair
 	
 	//will repair upto the internal node
-	public void goRightRepair(Node myNode,int count) throws ClassNotFoundException, IOException{
+	public void goRightRepair(Node myNode) throws ClassNotFoundException, IOException{
 		if(myNode.isLeaf()){
 			return;
 		}//end if
 		else{
-			goRightRepair(save.read(myNode.links.get(count)),count);
+			goRightRepair(save.read(myNode.links.get(myNode.links.size() -1)));
 			Node temp;
 			for(int i = 0; i < myNode.links.size();i++){
 				temp = save.read(myNode.links.get(i));

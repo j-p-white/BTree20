@@ -132,18 +132,28 @@ public class Test {
 		}
 		System.out.println(tree.bfs("n"));
 		foundWords = tree.bfs("n");	
-	/*	
+	
 		for(String s: foundWords){
 			System.out.println(s);
 			tree.delete(s);
 		}
-	*/
+	
+	/*
 		tree.delete("onion");
 		tree.delete("never");
 		tree.delete("sand");
 		tree.delete("newEngland");
-	//	tree.delete("north");
-
+		tree.delete("north");
+		tree.delete("pink");
+		tree.delete("vincent");
+		tree.delete("nest");
+		tree.delete("net");
+		tree.delete("newEarth");
+		tree.delete("newYork");
+		tree.delete("newguni");
+		tree.delete("nova");
+		tree.delete("pahntom");
+	*/
 		
 		for(int i =0; i < testWords.size();i++){
 		temp = tree.save.read(i); 
