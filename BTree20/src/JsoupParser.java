@@ -44,11 +44,11 @@ public class JsoupParser {
 						else if(words.length() < 34){
 							paddedWord = hookStrings(words,trimmedUrl) + getPadding(hookStrings(words,trimmedUrl).length());
 							count++;
+							System.out.println(count);
 							tree.insert(paddedWord);
 						}// end wordsIf	
 					}//end for
 				}//end scanner while
-				System.out.println(count);
 			scan.close();			
 		}//end try
 		catch(IOException e){
@@ -76,7 +76,7 @@ public class JsoupParser {
 		return url.split("[.]+");
 	}
 	
-	private String[] JsoupParsing(String url) throws IOException{
+	private String[] JsoupParsing(String url) throws IOException, ClassNotFoundException{
 		Document doc;
 		String bodyText;
 		//get the url
@@ -91,10 +91,15 @@ public class JsoupParser {
 	String[] myList = bodyText.split("[^a-zA-Z0-9']+");
 	
 	for(int i =0;i<myList.length;i++){
-		for(int j =i+1; j < myList.length;j++){
-			if(myList[i].equalsIgnoreCase(myList[j])){
-				myList[j] = "-999";
+		if(!tree.search(myList[i])){
+			for(int j =i+1; j < myList.length;j++){
+				if(myList[i].equalsIgnoreCase(myList[j])){
+					myList[j] = "-999";
+				}
 			}
+		}
+		else{
+			myList[i] ="-999";
 		}
 	}
 	return myList;

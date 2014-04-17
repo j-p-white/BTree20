@@ -18,6 +18,7 @@ public class Execute
 	     System.out.println("found words: "+ foundWords);
 	     
 	     for(String s : foundWords){
+	    	 System.out.println(s);
 	    	 t.delete(s);
 	     }
 	}

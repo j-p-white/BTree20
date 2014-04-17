@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Node implements Serializable{
 	private static final long serialVersionUID = 1L;
 	ArrayList<Node> temp = new ArrayList<Node>();
-	final int MAXKEYS = 3; //7 is test 
+	final int MAXKEYS = 4; 
 	final int middle = MAXKEYS/2;
 	ArrayList<String> keys = new ArrayList<String>(); 
 	ArrayList<Long> links = new ArrayList<Long>();
@@ -41,12 +41,12 @@ public class Node implements Serializable{
 		String middleVal;
 		int count = 0;
 		//get right
-		while(link.keys.size()> middle+1){
-			right.keys.add(link.keys.remove(middle+1));	
+		while(link.keys.size()> middle){//+1
+			right.keys.add(link.keys.remove(middle)); //+1	
 		}
 		if(!link.isLeaf()){
-			while(link.links.size()>middle+1){
-				right.links.add(link.links.remove(middle+1));
+			while(link.links.size()>middle){ //+1
+				right.links.add(link.links.remove(middle));//+1
 			}
 		}
 		//get the middle value
@@ -92,14 +92,14 @@ public class Node implements Serializable{
 		int mid = middle;
 		Node left = new Node(); 
 		//get all the left keys
-		for(int i =0; i < mid;i++){
+		for(int i =0; i < mid -1;i++){
 			left.keys.add(keys.remove(0));
 		}//end for
 		return left;
 	}// end makeNewLeft
 	
 	private void addLeftLinks(Node left){
-		int mid = middle+1; 
+		int mid = middle; 
 		for(int i =0; i<mid;i++){
 			left.links.add(links.remove(0));
 		}//end for
@@ -132,23 +132,21 @@ public class Node implements Serializable{
 	public void rotateLeft(Node deficient, Node overfull,int count) throws ClassNotFoundException, IOException{
 		String parentKey;
 		String replaceKey;
-		int apple =overfull.keys.size()-1;
-		
-		//get the link to the deficient right node
 		
 		// the parent key
-		parentKey = keys.remove(count -1 );
+		parentKey = keys.remove(count);
 		// parent key is placed in deficient right node brining it to minimum
-		deficient.keys.add(0,parentKey);
+		
+		deficient.keys.add(parentKey);
 		// get the key from the over full left node
-		replaceKey = overfull.keys.remove(apple);
-		if(!overfull.isLeaf()){
-			deficient.links.add(0,overfull.links.remove(overfull.links.size()-1));
-		}
+		replaceKey = overfull.keys.remove(0);
 		
 		//put the new key in the proper spot.
-		keys.add(count -1,replaceKey);
+		keys.add(count,replaceKey);
 		
+		if(!overfull.isLeaf()){
+			deficient.links.add(overfull.links.remove(0));
+		}
 		//write node back to file
 		temp.clear();
 		temp.add(overfull);
@@ -160,24 +158,24 @@ public class Node implements Serializable{
 		String replaceKey;
 
 		//the parent key
-		parentKey = keys.remove(count);
+		parentKey = keys.remove(count -1);
 		//parent key is placed in deficient left node brining it to minimum
-		dificent.keys.add(parentKey);
+		dificent.keys.add(0,parentKey);
 		//get the key from the over full right node
-		replaceKey = overfull.keys.remove(0);
+		replaceKey = overfull.keys.remove(overfull.keys.size() -1);
 		if(!overfull.isLeaf()){
-			dificent.links.add(overfull.links.remove(0));
+			dificent.links.add(0,overfull.links.remove(overfull.links.size() -1));
 		}
 		//put the new key in the proper spot 
-		keys.add(count,replaceKey);
+		keys.add(count -1,replaceKey);
 		
 		//write node back to file
 		temp.clear();
 		temp.add(dificent);
 		temp.add(overfull);
 	}
-	
-	public void merge(Node rightLink,Node leftLink, int count) throws ClassNotFoundException, IOException{
+	// right is getting value
+	public void mergeRight(Node rightLink,Node leftLink, int count) throws ClassNotFoundException, IOException{
 		String parentKey;
 		
 		parentKey = keys.remove(count);
@@ -197,9 +195,26 @@ public class Node implements Serializable{
 		temp.clear();
 		temp.add(rightLink);
 	}// end merge
+	//left is getting values
+	public void mergeLeft(Node leftLink, Node rightLink, int count){
+		String parentKey; 
+		
+		parentKey = keys.remove(count);
+		
+		leftLink.keys.add(parentKey);
+		
+		for(String s: rightLink.keys){
+			leftLink.keys.add(s);
+		}
+			leftLink.links.addAll(rightLink.links);
+		links.remove(count);
+		temp.clear();
+		temp.add(leftLink);
+	}
+	
 	public boolean minSize(){
 		boolean result; 
-		if(keys.size() < MAXKEYS/2){
+		if(keys.size() < (MAXKEYS/2)-1){
 			result = true;
 		}
 		else{ 

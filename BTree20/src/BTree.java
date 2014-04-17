@@ -226,7 +226,7 @@ public class BTree implements Serializable {
 		}// end for
 		return padding;
 	}	
-	
+	//double check neigbors
 	//having a inifnate loop here
 	public void repair(int count,Node n,Node badLink) throws ClassNotFoundException, IOException{
 		Node neighbor = new Node();
@@ -236,36 +236,33 @@ public class BTree implements Serializable {
 		if( count !=0 && n.links.get(count -1) !=null){
 				neighborL = save.read(n.links.get(count -1));
 		}
-		 if(count+1 < n.links.size() && count+1 != n.links.size()){
+		if(count+1 < n.links.size() && count+1 != n.links.size()){
 				neighborR = save.read(n.links.get(count+1));
-		 }
-		 
-		
-		if( neighborL.keys.size() > neighborL.middle){
-				n.rotateLeft(badLink,neighborL,count);	
 		}
-
-		else if( neighborR.keys.size() > neighbor.middle){
-				n.rotateRight(badLink,neighborR,count);
+		
+		 if( !neighborL.minSize()){
+			n.rotateRight(badLink,neighborL,count);
+		 }
+		
+		 else if( !neighborR.minSize()){
+				n.rotateLeft(badLink,neighborR,count);	
 		}
 		
 		else if(count+1 == n.links.size()){
 			    neighbor = save.read(n.links.get(count -1));
-			    n.merge(badLink, neighbor, count -1);
+			    n.mergeLeft(badLink, neighbor, count -1);
 		 }
 		 else{
-			 neighbor = save.read(n.links.get(count +1));
-			 n.merge(neighbor, badLink, count);
+			 neighbor = save.read(n.links.get(count));
+			 n.mergeRight(badLink,neighbor, count);
 		 }
-			    
+		    
 		
 		for(Node t: n.getNode()){
 				save.write(t);
 		}
 		save.write(n);
 	}
-	
-	
 	
 	public String predacessor(int count, Node n) throws ClassNotFoundException, IOException{
 		Node temp = save.read(n.links.get(count));
@@ -303,11 +300,13 @@ public class BTree implements Serializable {
 	
 	//will repair upto the internal node
 	public void goRightRepair(Node myNode) throws ClassNotFoundException, IOException{
+		Node temp2;
 		if(myNode.isLeaf()){
 			return;
 		}//end if
 		else{
-			goRightRepair(save.read(myNode.links.get(myNode.links.size() -1)));
+			temp2 =save.read(myNode.links.get(myNode.links.size() -1));
+			goRightRepair(temp2);
 			Node temp;
 			for(int i = 0; i < myNode.links.size();i++){
 				temp = save.read(myNode.links.get(i));

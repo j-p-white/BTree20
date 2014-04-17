@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
 public class Save {
 	
 	byte[] getBytes;
-	final int NUMBKEY = 3; 
+	final int NUMBKEY = 4; 
 	
 	final int NUMBLINKS = NUMBKEY +1;
 	final int STRINGLENGTH = 34; // the length of each string
