@@ -229,7 +229,6 @@ public class BTree implements Serializable {
 	//double check neigbors
 	//having a inifnate loop here
 	public void repair(int count,Node n,Node badLink) throws ClassNotFoundException, IOException{
-		Node neighbor = new Node();
 		Node neighborL = new Node();
 		Node neighborR = new Node();
 		
@@ -240,21 +239,20 @@ public class BTree implements Serializable {
 				neighborR = save.read(n.links.get(count+1));
 		}
 		
-		 if( !neighborL.minSize()){
+		 if( neighborL.keys.size() > (neighborL.MAXKEYS/2)-1){
 			n.rotateRight(badLink,neighborL,count);
 		 }
 		
-		 else if( !neighborR.minSize()){
+		 else if( neighborR.keys.size() > (neighborR.MAXKEYS/2)-1){
 				n.rotateLeft(badLink,neighborR,count);	
 		}
 		
-		else if(count+1 == n.links.size()){
-			    neighbor = save.read(n.links.get(count -1));
-			    n.mergeLeft(badLink, neighbor, count -1);
+		else if(count == 0){
+			 n.mergeRight(neighborR, badLink, count);
+			    
 		 }
 		 else{
-			 neighbor = save.read(n.links.get(count));
-			 n.mergeRight(badLink,neighbor, count);
+			 n.mergeLeft(neighborL,badLink, count -1);
 		 }
 		    
 		

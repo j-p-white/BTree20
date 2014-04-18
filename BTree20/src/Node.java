@@ -196,6 +196,7 @@ public class Node implements Serializable{
 		temp.add(rightLink);
 	}// end merge
 	//left is getting values
+	//need to switch leftLink and rightLink in mergeLeft
 	public void mergeLeft(Node leftLink, Node rightLink, int count){
 		String parentKey; 
 		
@@ -207,11 +208,11 @@ public class Node implements Serializable{
 			leftLink.keys.add(s);
 		}
 			leftLink.links.addAll(rightLink.links);
-		links.remove(count);
+		links.remove(count+1);
 		temp.clear();
 		temp.add(leftLink);
 	}
-	
+//this method needs to be improved	
 	public boolean minSize(){
 		boolean result; 
 		if(keys.size() < (MAXKEYS/2)-1){

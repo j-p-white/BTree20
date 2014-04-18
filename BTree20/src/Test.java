@@ -101,31 +101,33 @@ public class Test {
 			
 		}
 		System.out.println("end found words");
-		/*
+		
 		for(String s: foundWords){
 			System.out.println(s);
 				tree.delete(s);
 		}
-		*/
+/*	
 		tree.delete("onion");
 		tree.delete("never");
 		tree.delete("newYork");
 		tree.delete("pink");
-		//tree.delete("sand");
-		//tree.delete("nerf");
-		//tree.delete("nest");
-		//tree.delete("net");
-		//tree.delete("newEarth");
+		tree.delete("sand");
+		tree.delete("nerf");
+		tree.delete("nest");
+		tree.delete("net");
+		tree.delete("newEarth");
 		//tree.delete("newYork");
 		//tree.delete("newYork");
+	
+	*/
 		for(int i =0; i < testWords.size();i++){
-			int count = 0;
+		int count =0;
 		temp = tree.save.read(i); 
 		System.out.println("block number: "+temp.blockNumber);
 			for(String s:temp.keys){
 				System.out.println(s);
-				System.out.println("wordIndex: "+ count);
-				count++;
+				//System.out.println("wordIndex: "+count);
+				//count++;
 				
 			}
 			for(long l : temp.links){
