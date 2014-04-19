@@ -41,12 +41,12 @@ public class Node implements Serializable{
 		String middleVal;
 		int count = 0;
 		//get right
-		while(link.keys.size()> middle){//+1
-			right.keys.add(link.keys.remove(middle)); //+1	
+		while(link.keys.size()> middle){
+			right.keys.add(0,link.keys.remove(link.keys.size()-1)); //+1	
 		}
 		if(!link.isLeaf()){
-			while(link.links.size()>middle){ //+1
-				right.links.add(link.links.remove(middle));//+1
+			while(link.links.size()>middle+1){ //+1
+				right.links.add(0,link.links.remove(link.links.size()-1));//+1
 			}
 		}
 		//get the middle value
@@ -215,7 +215,7 @@ public class Node implements Serializable{
 //this method needs to be improved	
 	public boolean minSize(){
 		boolean result; 
-		if(keys.size() < (MAXKEYS/2)-1){
+		if(keys.size() < (MAXKEYS/2)){
 			result = true;
 		}
 		else{ 

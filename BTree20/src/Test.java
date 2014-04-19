@@ -3,7 +3,8 @@ import java.util.ArrayList;
 
 public class Test {
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
-		//testAdd();
+		//the delete is moving things that should not be
+		//testAdd(); //need to check this
 		testDelete();
 		//testPrefexFind();
 	}
@@ -61,12 +62,11 @@ public class Test {
 		BTree tree = new BTree();	
 		String padding,fixedString;
 		Node temp = new Node();
-		ArrayList<String> testWords = new ArrayList<String>();
 		ArrayList<String> foundWords = new ArrayList<String>();
+		ArrayList<String> testWords = new ArrayList<String>();
 		testWords.add("apple");
 		testWords.add("sand");
 		testWords.add("math");
-		
 		testWords.add("tree");
 		
 		testWords.add("north");
@@ -101,13 +101,15 @@ public class Test {
 			
 		}
 		System.out.println("end found words");
-		
+		/*
 		for(String s: foundWords){
 			System.out.println(s);
 				tree.delete(s);
 		}
-/*	
-		tree.delete("onion");
+	*/
+		
+		//tree.delete("onion");
+	/*	
 		tree.delete("never");
 		tree.delete("newYork");
 		tree.delete("pink");
@@ -116,10 +118,20 @@ public class Test {
 		tree.delete("nest");
 		tree.delete("net");
 		tree.delete("newEarth");
-		//tree.delete("newYork");
-		//tree.delete("newYork");
-	
+		tree.delete("newguni");
+		tree.delete("north");
+		tree.delete("nova");
+		tree.delete("pan");
+		tree.delete("phantom");
+		tree.delete("vincent");
+		tree.delete("von");
+		tree.delete("pool");
+		tree.delete("math");
+		tree.delete("strudle");
+		tree.delete("apple");
+		tree.delete("tree");
 	*/
+	
 		for(int i =0; i < testWords.size();i++){
 		int count =0;
 		temp = tree.save.read(i); 

@@ -271,7 +271,7 @@ public class BTree implements Serializable {
 		String toReturn;
 		Node temp;
 		if(myNode.isLeaf()){
-		toReturn = myNode.keys.remove(myNode.keys.size()-1);
+		toReturn = myNode.keys.remove(myNode.keys.size() -1);
 		save.write(myNode);
 		}//end if
 		else{
