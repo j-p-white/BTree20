@@ -39,7 +39,6 @@ public class JsoupParser {
 					for(String words:fileWords){
 						if(words.equals("-999")){
 							//do nothing
-							System.out.println("found dup");
 						}
 						else if(words.length() < 34){
 							paddedWord = hookStrings(words,trimmedUrl) + getPadding(hookStrings(words,trimmedUrl).length());
@@ -91,16 +90,12 @@ public class JsoupParser {
 	String[] myList = bodyText.split("[^a-zA-Z0-9']+");
 	
 	for(int i =0;i<myList.length;i++){
-		if(!tree.search(myList[i])){
 			for(int j =i+1; j < myList.length;j++){
 				if(myList[i].equalsIgnoreCase(myList[j])){
 					myList[j] = "-999";
 				}
 			}
-		}
-		else{
-			myList[i] ="-999";
-		}
+
 	}
 	return myList;
 	}// end JsoupParsing 

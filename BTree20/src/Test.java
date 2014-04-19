@@ -101,12 +101,12 @@ public class Test {
 			
 		}
 		System.out.println("end found words");
-		/*
+		
 		for(String s: foundWords){
 			System.out.println(s);
 				tree.delete(s);
 		}
-	*/
+	
 		
 		//tree.delete("onion");
 	/*	

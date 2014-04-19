@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Node implements Serializable{
 	private static final long serialVersionUID = 1L;
 	ArrayList<Node> temp = new ArrayList<Node>();
-	final int MAXKEYS = 4; 
+	final int MAXKEYS = 32; 
 	final int middle = MAXKEYS/2;
 	ArrayList<String> keys = new ArrayList<String>(); 
 	ArrayList<Long> links = new ArrayList<Long>();
@@ -25,7 +25,7 @@ public class Node implements Serializable{
 			return false;
 	}// end is leaf 
 	
-	public boolean isFull(){
+	public boolean isFull(){//here it was =
 		if(keys.size() == MAXKEYS)
 		{
 			return true;
@@ -41,13 +41,17 @@ public class Node implements Serializable{
 		String middleVal;
 		int count = 0;
 		//get right
-		while(link.keys.size()> middle){
+		while(link.keys.size()> middle +1){//here it was not -1
 			right.keys.add(0,link.keys.remove(link.keys.size()-1)); //+1	
 		}
+		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		System.out.println("splitKeys: "+right.keys.size());
 		if(!link.isLeaf()){
 			while(link.links.size()>middle+1){ //+1
 				right.links.add(0,link.links.remove(link.links.size()-1));//+1
 			}
+			System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+			System.out.println("split links: "+right.links.size());
 		}
 		//get the middle value
 		middleVal= link.keys.remove(link.keys.size()-1);
@@ -95,14 +99,18 @@ public class Node implements Serializable{
 		for(int i =0; i < mid -1;i++){
 			left.keys.add(keys.remove(0));
 		}//end for
+		System.out.println("????????????????????????????????????");
+		System.out.println("keys in left: "+left.keys.size());
 		return left;
 	}// end makeNewLeft
 	
 	private void addLeftLinks(Node left){
 		int mid = middle; 
-		for(int i =0; i<mid;i++){
+		for(int i =0; i<mid;i++){//here
 			left.links.add(links.remove(0));
 		}//end for
+		System.out.println("????????????????????????????????????");
+		System.out.println("links in left: "+left.links.size());
 	}//end add left links
 	
 	private Node makeNewRight(){
@@ -111,11 +119,15 @@ public class Node implements Serializable{
 		while(keys.size() >1){
 			right.keys.add(keys.remove(1));
 		}
+		System.out.println("????????????????????????????????????");
+		System.out.println("keys in right: "+right.keys.size());
 		return right;
 	}// end makeNewRight
 	
 	private void addRightLinks(Node right){
 			right.links.addAll(links);
+			System.out.println("????????????????????????????????????");
+			System.out.println("links in right: "+right.links.size());
 			links.clear();
 	}//end add right links
 	
@@ -215,7 +227,7 @@ public class Node implements Serializable{
 //this method needs to be improved	
 	public boolean minSize(){
 		boolean result; 
-		if(keys.size() < (MAXKEYS/2)){
+		if(keys.size() < (MAXKEYS/2) -1){
 			result = true;
 		}
 		else{ 
