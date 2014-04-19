@@ -11,7 +11,7 @@ public class Execute
 		JsoupParser parse = new JsoupParser(t);
 	     parse.readInFile();
 	     
-	     System.out.println("enter int findCharecters: " );
+	     System.out.print("enter int findCharecters: " );
 	     String val = scan.next();
 	     scan.close();
 	     foundWords = t.bfs(val);
@@ -20,6 +20,10 @@ public class Execute
 	     for(String s : foundWords){
 	    	 System.out.println(s);
 	    	 t.delete(s);
+	     }
+	     foundWords = t.bfs(val);
+	     if(foundWords.size() ==0){
+	    	 System.out.println("no values of: "+val+" found");
 	     }
 	}
 }
