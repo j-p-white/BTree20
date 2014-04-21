@@ -5,7 +5,7 @@ public class Test {
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		//the delete is moving things that should not be
 		//testAdd(); //need to check this
-		testDelete();
+		//testDelete();
 		//testPrefexFind();
 	}
 	public static void testAdd() throws IOException, ClassNotFoundException{

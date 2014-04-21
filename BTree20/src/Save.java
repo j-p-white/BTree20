@@ -1,5 +1,4 @@
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.nio.ByteBuffer;
 
 
@@ -13,14 +12,23 @@ public class Save {
 	final int OFFSETBYTELENGTH = 8; // length of each long
 	
 	final int STARTLINKBYTES = STRINGLENGTH * NUMBKEY; // where we start reading links
-	final int NODEBLOCKLOCATIONPOS = STARTLINKBYTES +(OFFSETBYTELENGTH * NUMBLINKS); // where the nodes block number is - 8 links and 7 words
 	final int NUMBLINKBYTES = OFFSETBYTELENGTH * NUMBLINKS; // the number of links in bytes - 8 longs worth
+	final int NODEBLOCKLOCATIONPOS = STARTLINKBYTES +(NUMBLINKBYTES); // where the nodes block number is - 8 links and 7 words
 	final int TOTALNODESIZE = NODEBLOCKLOCATIONPOS +OFFSETBYTELENGTH; // total size of the node 
+	Flarf saveFile;
 	
-	Flarf saveFile = new Flarf(TOTALNODESIZE,"Btree.dat");
-	
-	public Save() throws FileNotFoundException{
-		 
+	// takes in a flarf object if it is empty make a new one 
+	//else read form that flarf object
+	public Save(Flarf f) throws IOException{
+			if(f.length()!=0){
+				saveFile = f;
+			}
+			else {
+				saveFile = new Flarf(TOTALNODESIZE,"Btree.dat");
+			}
+	}
+	public Save() throws IOException{
+		saveFile = new Flarf(TOTALNODESIZE,"Btree.dat");
 	}
 	
 	public void write(Node n) throws IOException{

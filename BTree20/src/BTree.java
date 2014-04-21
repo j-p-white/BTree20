@@ -342,7 +342,7 @@ public class BTree implements Serializable {
 			Node node = (Node)queue.remove();
 			for(String s : node.keys){
 				String[] v = s.split("\\s+");
-				if(v[0].indexOf(Pre) != -1){
+				if(v[0].startsWith(Pre)){
 					myList.add(s);
 				}
 			}
